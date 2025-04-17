@@ -1,0 +1,45 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>_LayoutAdmin</title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm px-4">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold text-primary" href="#">
+                <i class="fas fa-tools me-2"></i>Proje Adı
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <!-- Menü bağlantılarını buraya ekle -->
+                    <li class="nav-item">
+                       @Html.ActionLink("Arızalar","ArızaGoruntuleme","Admin",new {},new { @class = "nav-Link"})
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("Yetkilendirme", "Yetkilendirme", "Admin", new { }, new { @class = "nav-Link" })
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("Düzenleme", "Düzenleme", "Admin", new { }, new { @class = "nav-Link" })
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <main role="main" class="container">
+        @RenderBody()
+    </main>
+
+</body>
+</html>
