@@ -24,5 +24,6 @@ namespace HataBildirimSistemi.Controllers
             }
             return View();
         }
+
     }
 }

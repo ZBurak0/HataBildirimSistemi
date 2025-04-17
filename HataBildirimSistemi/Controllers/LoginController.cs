@@ -43,10 +43,24 @@ namespace HataBildirimSistemi.Controllers
                 Session["KBirimId"] = kullanici.BirimId;
                 Session["KYetkiId"] = kullanici.YetkiId;
 
-                return RedirectToAction("Bildirim", "Kullanici");
-
+                if (kullanici.YetkiId == 2)
+                {
+                    return RedirectToAction("Bildirim","KUllanici");
+                }
+                if (kullanici.YetkiId == 1)
+                {
+                        switch (kullanici.BirimId)
+                        {
+                            case 1:
+                                return RedirectToAction("Yazilim", "Admin");
+                            case 2:
+                                return RedirectToAction("Sistem", "Admin");
+                            case 3:
+                                return RedirectToAction("Ag", "Admin");
+                        }
+                }
             }
-            if (admin != null)
+            if (admin != null )
             {
                 Session["ABirimId"] = admin.BirimId;
                 Session["AYetkiId"] = admin.YetkiId;
