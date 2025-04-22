@@ -25,13 +25,13 @@
                 <ul class="navbar-nav">
                     <!-- Menü bağlantılarını buraya ekle -->
                     <li class="nav-item">
-                       @Html.ActionLink("Arızalar","ArızaGoruntuleme","Admin",new {},new { @class = "nav-Link"})
+                       @Html.ActionLink("Arızalar","ArızaGoruntuleme","GenelAdmin",new {},new { @class = "nav-Link"})
                     </li>
                     <li class="nav-item">
-                        @Html.ActionLink("Yetkilendirme", "Yetkilendirme", "Admin", new { }, new { @class = "nav-Link" })
+                        @Html.ActionLink("YetkiliServisEkle", "YetkiliServisEkle", "GenelAdmin", new {}, new { @class = "nav-Link" })
                     </li>
                     <li class="nav-item">
-                        @Html.ActionLink("Düzenleme", "Düzenleme", "Admin", new { }, new { @class = "nav-Link" })
+                        @Html.ActionLink("Düzenleme", "Düzenleme", "GenelAdmin", new {}, new { @class = "nav-Link" })
                     </li>
                 </ul>
             </div>

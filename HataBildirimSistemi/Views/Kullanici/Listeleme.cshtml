@@ -3,6 +3,50 @@
     ViewBag.Title = "Listeleme";
     Layout = "~/Views/Shared/_LayoutKullanici.cshtml";
 }
+@model List<HataBildirimSistemi.Models.ArızaBildirim>
 
 <h2>Listeleme</h2>
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Kullanıcı Tablosu</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body class="bg-light">
+
+    <div class="container mt-5">
+        <h3 class="mb-4">Kullanıcı Listesi</h3>
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>Arıza ID</th>
+                    <th>Arıza Adı</th>
+                    <th>Arıza Tür</th>
+                    <th>Arıza Birim</th>
+                    <th>Arıza Açıklama</th>
+                    <th>Arıza Dosya</th>
+                    <th>Arıza Tarih</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <th>@item.Id</th>
+                        <th>@item.Ad</th>
+                        <th>@item.ArızaTur.Ad<th>                        
+                        <th>@item.Birim.Ad</th>
+                        <th>@item.Aciklama</th>
+                        <th>@item.DosyaYolu</th>
+                        <th>@item.Tarih</th>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html> 
+
 

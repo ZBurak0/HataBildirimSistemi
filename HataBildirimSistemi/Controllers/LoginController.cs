@@ -74,8 +74,12 @@ namespace HataBildirimSistemi.Controllers
                         case 2:
                             return RedirectToAction("Sistem", "Admin");
                         case 3:
-                            return RedirectToAction("Ag", "Admin");
+                            return RedirectToAction("Ag", "Admin");         
                     }
+                }
+                if (admin.YetkiId == 4 && admin.BirimId == 4)
+                {
+                    return RedirectToAction("Index","GenelAdmin");
                 }
             }
             if (yetkiliServis != null)
