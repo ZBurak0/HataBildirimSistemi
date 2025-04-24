@@ -1,13 +1,14 @@
 ﻿@model List<HataBildirimSistemi.Models.ArızaBildirim>
+
 @{
-    ViewBag.Title = "Listeleme";
-    Layout = "~/Views/Shared/_LayoutKullanici.cshtml";
+    ViewBag.Title = "Arıza Görüntüleme";
+    Layout = "~/Views/Shared/_LayoutGenelAdmin.cshtml";
 }
 
 <div class="container mt-5">
     <h2 class="mb-4 text-primary">Arıza Görüntüleme</h2>
 
-    @using (Html.BeginForm("Listeleme", "Kullanici", FormMethod.Post))
+    @using (Html.BeginForm("ArızaGoruntuleme", "GenelAdmin", FormMethod.Post))
     {
         <div class="row mb-4">
             <div class="col-md-4">

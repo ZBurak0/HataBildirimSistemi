@@ -5,6 +5,13 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
       <Schema Namespace="HataBildirimModelMvcModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="__EFMigrationsHistory">
+          <Key>
+            <PropertyRef Name="MigrationId" />
+          </Key>
+          <Property Name="MigrationId" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="ProductVersion" Type="nvarchar" MaxLength="32" Nullable="false" />
+        </EntityType>
         <EntityType Name="Admin">
           <Key>
             <PropertyRef Name="Id" />
@@ -31,6 +38,7 @@
           <Property Name="Aciklama" Type="nvarchar" MaxLength="350" />
           <Property Name="Tarih" Type="datetime" />
           <Property Name="DosyaYolu" Type="nvarchar" MaxLength="500" />
+          <Property Name="DurumId" Type="int" />
         </EntityType>
         <EntityType Name="ArızaTur">
           <Key>
@@ -46,6 +54,13 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Ad" Type="nvarchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="Durum">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Ad" Type="varchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="Kullanici">
           <Key>
             <PropertyRef Name="Id" />
@@ -59,6 +74,7 @@
           <Property Name="KKullaniciAd" Type="nvarchar" MaxLength="30" />
           <Property Name="KSifre" Type="nvarchar" MaxLength="500" />
           <Property Name="YetkiId" Type="int" />
+          <Property Name="DurumId" Type="int" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -139,6 +155,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_ArızaBildirim_Durum">
+          <End Role="Durum" Type="Self.Durum" Multiplicity="0..1" />
+          <End Role="ArızaBildirim" Type="Self.ArızaBildirim" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Durum">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ArızaBildirim">
+              <PropertyRef Name="DurumId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Kullanici_Birim">
           <End Role="Birim" Type="Self.Birim" Multiplicity="0..1" />
           <End Role="Kullanici" Type="Self.Kullanici" Multiplicity="*" />
@@ -188,10 +216,12 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="HataBildirimModelMvcModelStoreContainer">
+          <EntitySet Name="__EFMigrationsHistory" EntityType="Self.__EFMigrationsHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Admin" EntityType="Self.Admin" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ArızaBildirim" EntityType="Self.ArızaBildirim" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ArızaTur" EntityType="Self.ArızaTur" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Birim" EntityType="Self.Birim" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Durum" EntityType="Self.Durum" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Kullanici" EntityType="Self.Kullanici" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Yetki" EntityType="Self.Yetki" Schema="dbo" store:Type="Tables" />
@@ -210,6 +240,10 @@
           </AssociationSet>
           <AssociationSet Name="FK_ArızaBildirim_Birim" Association="Self.FK_ArızaBildirim_Birim">
             <End Role="Birim" EntitySet="Birim" />
+            <End Role="ArızaBildirim" EntitySet="ArızaBildirim" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ArızaBildirim_Durum" Association="Self.FK_ArızaBildirim_Durum">
+            <End Role="Durum" EntitySet="Durum" />
             <End Role="ArızaBildirim" EntitySet="ArızaBildirim" />
           </AssociationSet>
           <AssociationSet Name="FK_Kullanici_Birim" Association="Self.FK_Kullanici_Birim">
@@ -234,6 +268,13 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="HataBildirimModelMvcModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="C__EFMigrationsHistory">
+          <Key>
+            <PropertyRef Name="MigrationId" />
+          </Key>
+          <Property Name="MigrationId" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ProductVersion" Type="String" MaxLength="32" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
         <EntityType Name="Admin">
           <Key>
             <PropertyRef Name="Id" />
@@ -262,8 +303,10 @@
           <Property Name="Aciklama" Type="String" MaxLength="350" FixedLength="false" Unicode="true" />
           <Property Name="Tarih" Type="DateTime" Precision="3" />
           <Property Name="DosyaYolu" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="DurumId" Type="Int32" />
           <NavigationProperty Name="ArızaTur" Relationship="Self.FK_ArızaBildirim_ArızaTur" FromRole="ArızaBildirim" ToRole="ArızaTur" />
           <NavigationProperty Name="Birim" Relationship="Self.FK_ArızaBildirim_Birim" FromRole="ArızaBildirim" ToRole="Birim" />
+          <NavigationProperty Name="Durum" Relationship="Self.FK_ArızaBildirim_Durum" FromRole="ArızaBildirim" ToRole="Durum" />
         </EntityType>
         <EntityType Name="ArızaTur">
           <Key>
@@ -284,6 +327,14 @@
           <NavigationProperty Name="ArızaBildirim" Relationship="Self.FK_ArızaBildirim_Birim" FromRole="Birim" ToRole="ArızaBildirim" />
           <NavigationProperty Name="Kullanici" Relationship="Self.FK_Kullanici_Birim" FromRole="Birim" ToRole="Kullanici" />
         </EntityType>
+        <EntityType Name="Durum">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Ad" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="ArızaBildirim" Relationship="Self.FK_ArızaBildirim_Durum" FromRole="Durum" ToRole="ArızaBildirim" />
+        </EntityType>
         <EntityType Name="Kullanici">
           <Key>
             <PropertyRef Name="Id" />
@@ -297,6 +348,7 @@
           <Property Name="KKullaniciAd" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Name="KSifre" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="YetkiId" Type="Int32" />
+          <Property Name="DurumId" Type="Int32" />
           <NavigationProperty Name="Birim" Relationship="Self.FK_Kullanici_Birim" FromRole="Kullanici" ToRole="Birim" />
           <NavigationProperty Name="Yetki" Relationship="Self.FK_Kullanici_Yetki" FromRole="Kullanici" ToRole="Yetki" />
         </EntityType>
@@ -384,6 +436,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_ArızaBildirim_Durum">
+          <End Role="Durum" Type="Self.Durum" Multiplicity="0..1" />
+          <End Role="ArızaBildirim" Type="Self.ArızaBildirim" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Durum">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ArızaBildirim">
+              <PropertyRef Name="DurumId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_YetkiliServis_ArızaTur">
           <End Role="ArızaTur" Type="Self.ArızaTur" Multiplicity="0..1" />
           <End Role="YetkiliServis" Type="Self.YetkiliServis" Multiplicity="*" />
@@ -432,11 +496,13 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="HataBildirimModelMvcEntities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="HataBildirimModelMvcEntities2" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="C__EFMigrationsHistory" EntityType="Self.C__EFMigrationsHistory" />
           <EntitySet Name="Admin" EntityType="Self.Admin" />
           <EntitySet Name="ArızaBildirim" EntityType="Self.ArızaBildirim" />
           <EntitySet Name="ArızaTur" EntityType="Self.ArızaTur" />
           <EntitySet Name="Birim" EntityType="Self.Birim" />
+          <EntitySet Name="Durum" EntityType="Self.Durum" />
           <EntitySet Name="Kullanici" EntityType="Self.Kullanici" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
           <EntitySet Name="Yetki" EntityType="Self.Yetki" />
@@ -455,6 +521,10 @@
           </AssociationSet>
           <AssociationSet Name="FK_ArızaBildirim_Birim" Association="Self.FK_ArızaBildirim_Birim">
             <End Role="Birim" EntitySet="Birim" />
+            <End Role="ArızaBildirim" EntitySet="ArızaBildirim" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ArızaBildirim_Durum" Association="Self.FK_ArızaBildirim_Durum">
+            <End Role="Durum" EntitySet="Durum" />
             <End Role="ArızaBildirim" EntitySet="ArızaBildirim" />
           </AssociationSet>
           <AssociationSet Name="FK_YetkiliServis_ArızaTur" Association="Self.FK_YetkiliServis_ArızaTur">
@@ -479,7 +549,15 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="HataBildirimModelMvcModelStoreContainer" CdmEntityContainer="HataBildirimModelMvcEntities">
+        <EntityContainerMapping StorageEntityContainer="HataBildirimModelMvcModelStoreContainer" CdmEntityContainer="HataBildirimModelMvcEntities2">
+          <EntitySetMapping Name="C__EFMigrationsHistory">
+            <EntityTypeMapping TypeName="HataBildirimModelMvcModel.C__EFMigrationsHistory">
+              <MappingFragment StoreEntitySet="__EFMigrationsHistory">
+                <ScalarProperty Name="MigrationId" ColumnName="MigrationId" />
+                <ScalarProperty Name="ProductVersion" ColumnName="ProductVersion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Admin">
             <EntityTypeMapping TypeName="HataBildirimModelMvcModel.Admin">
               <MappingFragment StoreEntitySet="Admin">
@@ -506,6 +584,7 @@
                 <ScalarProperty Name="Aciklama" ColumnName="Aciklama" />
                 <ScalarProperty Name="Tarih" ColumnName="Tarih" />
                 <ScalarProperty Name="DosyaYolu" ColumnName="DosyaYolu" />
+                <ScalarProperty Name="DurumId" ColumnName="DurumId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -525,6 +604,14 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Durum">
+            <EntityTypeMapping TypeName="HataBildirimModelMvcModel.Durum">
+              <MappingFragment StoreEntitySet="Durum">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Ad" ColumnName="Ad" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Kullanici">
             <EntityTypeMapping TypeName="HataBildirimModelMvcModel.Kullanici">
               <MappingFragment StoreEntitySet="Kullanici">
@@ -537,6 +624,7 @@
                 <ScalarProperty Name="KKullaniciAd" ColumnName="KKullaniciAd" />
                 <ScalarProperty Name="KSifre" ColumnName="KSifre" />
                 <ScalarProperty Name="YetkiId" ColumnName="YetkiId" />
+                <ScalarProperty Name="DurumId" ColumnName="DurumId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

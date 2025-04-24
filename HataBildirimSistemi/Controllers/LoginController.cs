@@ -9,7 +9,7 @@ namespace HataBildirimSistemi.Controllers
 {
     public class LoginController : Controller
     {
-        HataBildirimModelMvcEntities entity = new HataBildirimModelMvcEntities();
+        HataBildirimModelMvcEntities2 entity = new HataBildirimModelMvcEntities2();
         // GET: Login
         public ActionResult Index()
         {
@@ -38,29 +38,29 @@ namespace HataBildirimSistemi.Controllers
 
             if (kullanici != null)
             {
-                Session["Id"] = kullanici.Id;
-                Session["Ad"] = kullanici.Ad;
+                Session["KId"] = kullanici.Id;
+                Session["KAd"] = kullanici.Ad;
                 Session["KBirimId"] = kullanici.BirimId;
                 Session["KYetkiId"] = kullanici.YetkiId;
 
                 if (kullanici.YetkiId == 2)
                 {
-                    return RedirectToAction("Bildirim","KUllanici");
+                    return RedirectToAction("Bildirim", "KUllanici");
                 }
                 if (kullanici.YetkiId == 1)
                 {
-                        switch (kullanici.BirimId)
-                        {
-                            case 1:
-                                return RedirectToAction("Yazilim", "Admin");
-                            case 2:
-                                return RedirectToAction("Sistem", "Admin");
-                            case 3:
-                                return RedirectToAction("Ag", "Admin");
-                        }
+                    switch (kullanici.BirimId)
+                    {
+                        case 1:
+                            return RedirectToAction("Yazilim", "Admin");
+                        case 2:
+                            return RedirectToAction("Sistem", "Admin");
+                        case 3:
+                            return RedirectToAction("Ag", "Admin");
+                    }
                 }
             }
-            if (admin != null )
+            if (admin != null)
             {
                 Session["ABirimId"] = admin.BirimId;
                 Session["AYetkiId"] = admin.YetkiId;
@@ -74,19 +74,19 @@ namespace HataBildirimSistemi.Controllers
                         case 2:
                             return RedirectToAction("Sistem", "Admin");
                         case 3:
-                            return RedirectToAction("Ag", "Admin");         
+                            return RedirectToAction("Ag", "Admin");
                     }
                 }
                 if (admin.YetkiId == 4 && admin.BirimId == 4)
                 {
-                    return RedirectToAction("Index","GenelAdmin");
+                    return RedirectToAction("Index", "GenelAdmin");
                 }
             }
             if (yetkiliServis != null)
             {
                 Session["YYetkiId"] = yetkiliServis.YetkiId;
                 Session["ArizaTurId"] = yetkiliServis.ArizaTurId;
-                if(yetkiliServis.YetkiId ==3)
+                if (yetkiliServis.YetkiId == 3)
                 {
                     switch (yetkiliServis.ArizaTurId)
                     {
@@ -99,7 +99,7 @@ namespace HataBildirimSistemi.Controllers
                         case 4:
                             return RedirectToAction("Donanim", "YetkiliServis");
                     }
-                }    
+                }
             }
             ViewBag.Mesaj = "Kullanıcı adı veya şifre yanlış.";
             return View();

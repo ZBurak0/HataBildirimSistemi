@@ -22,8 +22,10 @@ namespace HataBildirimSistemi.Models
         public string Aciklama { get; set; }
         public Nullable<System.DateTime> Tarih { get; set; }
         public string DosyaYolu { get; set; }
+        public Nullable<int> DurumId { get; set; }
     
         public virtual ArızaTur ArızaTur { get; set; }
         public virtual Birim Birim { get; set; }
+        public virtual Durum Durum { get; set; }
     }
 }

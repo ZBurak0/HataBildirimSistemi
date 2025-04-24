@@ -1,31 +1,67 @@
-﻿
-@model HataBildirimSistemi.Models.AdminPanelViewModel
+﻿@model HataBildirimSistemi.Models.AdminPanelViewModel
 @{
-    ViewBag.Title = "YetkiliServisEkle";
+    ViewBag.Title = "Yetkili Servis Ekle";
     Layout = "~/Views/Shared/_LayoutGenelAdmin.cshtml";
 }
 
-<h2>Genel Admin Yetkili Servis Atama</h2>
+<div class="container mt-5">
+    <h2 class="mb-4 text-primary">Genel Admin Yetkili Servis Atama</h2>
 
-<h3>Yetkili Servis Ekle</h3>
-@using (Html.BeginForm("YetkiliServisEkle", "GenelAdmin", FormMethod.Post))
-{
-    <label>Ad:</label> @Html.TextBox("Ad")//max 50 hane olacak
-    <br />
-    <label>Soyad:</label> @Html.TextBox("Soyad")//max 50 hane olacak
-    <br />
-    <label>Tel No:</label> @Html.TextBox("TelNo")//max 11 hane olacak
-    <br />
-    <label>Mail:</label> @Html.TextBox("Mail")//max 35 hane olacak
-    <br />
-    <label>Kullanıcı Adı:</label> @Html.TextBox("YKullaniciAd")//max 20 hane olacak
-    <br />
-    <label>Şifre:</label> @Html.Password("YSifre")//max 20 hane olacak
-    <br />
-    <label>Arıza Türü:</label>
-    @Html.DropDownList("ArizaTurId", new SelectList(Model.ArizaTurleri, "Id", "Ad"))
-    <br />
-    <br />
-    <input type="submit" value="Ekle" />
-}
+    @using (Html.BeginForm("YetkiliServisEkle", "GenelAdmin", FormMethod.Post))
+    {
+        <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">Ad:</label>
+            <div class="col-sm-6">
+                @Html.TextBox("Ad", null, new { @class = "form-control", maxlength = 50 })
+            </div>
+        </div>
 
+        <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">Soyad:</label>
+            <div class="col-sm-6">
+                @Html.TextBox("Soyad", null, new { @class = "form-control", maxlength = 50 })
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">Tel No:</label>
+            <div class="col-sm-6">
+                @Html.TextBox("TelNo", null, new { @class = "form-control", maxlength = 11 })
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">Mail:</label>
+            <div class="col-sm-6">
+                @Html.TextBox("Mail", null, new { @class = "form-control", maxlength = 35 })
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">Kullanıcı Adı:</label>
+            <div class="col-sm-6">
+                @Html.TextBox("YKullaniciAd", null, new { @class = "form-control", maxlength = 20 })
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">Şifre:</label>
+            <div class="col-sm-6">
+                @Html.Password("YSifre", null, new { @class = "form-control", maxlength = 20 })
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <label class="col-sm-2 col-form-label">Arıza Türü:</label>
+            <div class="col-sm-6">
+                @Html.DropDownList("ArizaTurId", new SelectList(Model.ArizaTurleri, "Id", "Ad"), "Seçiniz", new { @class = "form-select" })
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6 offset-sm-2">
+                <input type="submit" value="Ekle" class="btn btn-success" />
+            </div>
+        </div>
+    }
+</div>

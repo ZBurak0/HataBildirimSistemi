@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace HataBildirimSistemi.Controllers
 {
     public class GenelAdminController : Controller
     {
-        HataBildirimModelMvcEntities entity = new HataBildirimModelMvcEntities();
+        HataBildirimModelMvcEntities2 entity = new HataBildirimModelMvcEntities2();
         // GET: Admin
         public ActionResult Index()
         {
@@ -17,14 +18,11 @@ namespace HataBildirimSistemi.Controllers
             if (yetkiturıd == 4)
             {
                 return View();
-
             }
             else
             {
                 return RedirectToAction("Index", "Login");
-                
             }
-
         }
         [HttpGet]
         public ActionResult YetkiliServisEkle()
@@ -57,7 +55,44 @@ namespace HataBildirimSistemi.Controllers
 
             return RedirectToAction("YetkiliServisEkle");
         }
+        [HttpGet]
+        public ActionResult ArızaGoruntuleme()
+        {
+            ViewBag.Birimler = new SelectList(entity.Birim.ToList(), "Id", "Ad");
+            ViewBag.Arizalar = new SelectList(entity.ArızaTur.ToList(), "Id", "Ad");
 
+            var arizalarr = entity.ArızaBildirim
+                .Include(a => a.Birim)
+                .Include(a => a.ArızaTur)
+                .Include(a => a.Durum)
+                .ToList();
 
+            return View(arizalarr);
+        }
+
+        [HttpPost]
+        public ActionResult ArızaGoruntuleme(int? BirimId, int? ArizaTurId)
+        {
+            var arizalarr = entity.ArızaBildirim
+                .Include(a => a.Birim)
+                .Include(a => a.ArızaTur)
+                .Include(a => a.Durum)
+                .AsQueryable();
+
+            if (BirimId.HasValue)
+            {
+                arizalarr = arizalarr.Where(a => a.BirimId == BirimId);
+            }
+
+            if (ArizaTurId.HasValue)
+            {
+                arizalarr = arizalarr.Where(a => a.ArizaTurId == ArizaTurId);
+            }
+
+            ViewBag.Birimler = new SelectList(entity.Birim.ToList(), "Id", "Ad", BirimId);
+            ViewBag.Arizalar = new SelectList(entity.ArızaTur.ToList(), "Id", "Ad", ArizaTurId);
+
+            return View(arizalarr.ToList());
+        }
     }
 }

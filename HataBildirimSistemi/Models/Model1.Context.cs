@@ -13,10 +13,10 @@ namespace HataBildirimSistemi.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class HataBildirimModelMvcEntities : DbContext
+    public partial class HataBildirimModelMvcEntities2 : DbContext
     {
-        public HataBildirimModelMvcEntities()
-            : base("name=HataBildirimModelMvcEntities")
+        public HataBildirimModelMvcEntities2()
+            : base("name=HataBildirimModelMvcEntities2")
         {
         }
     
@@ -25,10 +25,12 @@ namespace HataBildirimSistemi.Models
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<C__EFMigrationsHistory> C__EFMigrationsHistory { get; set; }
         public virtual DbSet<Admin> Admin { get; set; }
         public virtual DbSet<ArızaBildirim> ArızaBildirim { get; set; }
         public virtual DbSet<ArızaTur> ArızaTur { get; set; }
         public virtual DbSet<Birim> Birim { get; set; }
+        public virtual DbSet<Durum> Durum { get; set; }
         public virtual DbSet<Kullanici> Kullanici { get; set; }
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<Yetki> Yetki { get; set; }

@@ -7,13 +7,14 @@ using System.Security.Cryptography;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
 namespace HataBildirimSistemi.Controllers
 {
-    
+
     public class KullaniciController : Controller
     {
-        HataBildirimModelMvcEntities entity = new HataBildirimModelMvcEntities();
+        HataBildirimModelMvcEntities2 entity = new HataBildirimModelMvcEntities2();
         // GET: Kullanici
         public ActionResult Bildirim()
         {
@@ -26,7 +27,9 @@ namespace HataBildirimSistemi.Controllers
         public ActionResult Bildirim(FormCollection formCollection, HttpPostedFileBase Dosya)
         {
             var Arizalar = (from p in entity.ArızaTur select p).ToList();
+            var Durumlar = (from p in entity.Durum select p).ToList();
             ViewBag.Arizalar = Arizalar;
+            ViewBag.Durum = Durumlar;//viewde combobox ayarlamada kaldı
 
             int BirimId = Convert.ToInt32(Session["KBirimId"]);
             string Ad = (string)Session["Ad"];
@@ -70,13 +73,50 @@ namespace HataBildirimSistemi.Controllers
             ViewBag.basari = "Kaydetme başarılı";
             return View();
         }
+
+
+        [HttpGet]
         public ActionResult Listeleme()
         {
+            var KAd = Session["KAd"];
+            ViewBag.Birimler = new SelectList(entity.Birim.ToList(), "Id", "Ad");
+            ViewBag.Arizalar = new SelectList(entity.ArızaTur.ToList(), "Id", "Ad");
+
             var arizalarr = entity.ArızaBildirim
-                      .Include(a => a.Birim)
-                      .Include(a => a.ArızaTur)
-                      .ToList();
+                .Include(a => a.Birim)
+                .Include(a => a.ArızaTur)
+                .Include(a => a.Durum)
+                .Where(a => a.KullaniciAd == KAd)
+                .ToList();
+
             return View(arizalarr);
+        }
+
+        [HttpPost]
+        public ActionResult Listeleme(int? BirimId, int? ArizaTurId)
+        {
+            var KAd = Session["KAd"];
+            var arizalarr = entity.ArızaBildirim
+                .Include(a => a.Birim)
+                .Include(a => a.ArızaTur)
+                .Include(a => a.Durum)
+                .Where(a => a.KullaniciAd == KAd)
+                .AsQueryable();
+
+            if (BirimId.HasValue)
+            {
+                arizalarr = arizalarr.Where(a => a.BirimId == BirimId);
+            }
+
+            if (ArizaTurId.HasValue)
+            {
+                arizalarr = arizalarr.Where(a => a.ArizaTurId == ArizaTurId);
+            }
+
+            ViewBag.Birimler = new SelectList(entity.Birim.ToList(), "Id", "Ad", BirimId);
+            ViewBag.Arizalar = new SelectList(entity.ArızaTur.ToList(), "Id", "Ad", ArizaTurId);
+
+            return View(arizalarr.ToList());
         }
     }
 }
