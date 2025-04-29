@@ -1,0 +1,31 @@
+﻿@model HataBildirimSistemi.Models.Kullanici
+@{
+    ViewBag.Title = "Listeleme";
+    Layout = "~/Views/Shared/_LayoutKullanici.cshtml";
+}
+
+<h2 class="mt-4">Profil Bilgilerim</h2>
+
+<table class="table table-bordered mt-3 w-50">
+    <tr>
+        <th>Ad</th>
+        <td>@Model.Ad</td>
+    </tr>
+    <tr>
+        <th>Soyad</th>
+        <td>@Model.Soyad</td>
+    </tr>
+    <tr>
+        <th>Telefon</th>
+        <td>@Model.TelNo</td>
+    </tr>
+    <tr>
+        <th>Şifre</th>
+        <td>@Model.KSifre</td>
+    </tr>
+</table>
+<a href="@Url.Action("Duzenle", "Kullanici", new { id = Model.Id })" class="btn btn-warning">
+    Düzenle
+</a>
+
+

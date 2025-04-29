@@ -1,0 +1,43 @@
+﻿
+@{
+    ViewBag.Title = "BirimEkle";
+    Layout = "~/Views/Shared/_LayoutGenelAdmin.cshtml";
+}
+
+<h2>Birim Ekle / Çıkar</h2>
+
+@using (Html.BeginForm("BirimEkle", "GenelAdmin", FormMethod.Post))
+{
+    <div class="form-group">
+        <label for="BirimAd">Birim Adı:</label>
+        <input type="text" name="BirimAd" id="BirimAd" class="form-control" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Ekle</button>
+}
+
+<h3>Mevcut Birimler</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Birim Adı</th>
+            <th>Aksiyonlar</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var Birim in Model.Birimler)
+        {
+            <tr>
+                <td>@Birim.Ad</td>
+                <td>
+                    @using (Html.BeginForm("BirimSil", "GenelAdmin", FormMethod.Post))
+                    {
+                        <!-- Dinamik Id için manuel hidden input -->
+                        <input type="hidden" name="Id" value="@Birim.Id" />
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('Bu birimi silmek istediğinize emin misiniz?');">Sil</button>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

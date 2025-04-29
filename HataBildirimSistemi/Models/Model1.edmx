@@ -20,7 +20,6 @@
           <Property Name="Ad" Type="nvarchar" MaxLength="50" />
           <Property Name="Soyad" Type="nvarchar" MaxLength="50" />
           <Property Name="TelNo" Type="char" MaxLength="11" />
-          <Property Name="Mail" Type="nvarchar" MaxLength="50" />
           <Property Name="BirimId" Type="int" />
           <Property Name="AKullaniciAd" Type="nvarchar" MaxLength="30" />
           <Property Name="ASifre" Type="nvarchar" MaxLength="500" />
@@ -70,11 +69,9 @@
           <Property Name="Soyad" Type="nvarchar" MaxLength="50" />
           <Property Name="BirimId" Type="int" />
           <Property Name="TelNo" Type="char" MaxLength="11" />
-          <Property Name="Mail" Type="nvarchar" MaxLength="50" />
           <Property Name="KKullaniciAd" Type="nvarchar" MaxLength="30" />
           <Property Name="KSifre" Type="nvarchar" MaxLength="500" />
           <Property Name="YetkiId" Type="int" />
-          <Property Name="DurumId" Type="int" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -283,7 +280,6 @@
           <Property Name="Ad" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Soyad" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="TelNo" Type="String" MaxLength="11" FixedLength="true" Unicode="false" />
-          <Property Name="Mail" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="BirimId" Type="Int32" />
           <Property Name="AKullaniciAd" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Name="ASifre" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
@@ -344,11 +340,9 @@
           <Property Name="Soyad" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="BirimId" Type="Int32" />
           <Property Name="TelNo" Type="String" MaxLength="11" FixedLength="true" Unicode="false" />
-          <Property Name="Mail" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="KKullaniciAd" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Name="KSifre" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="YetkiId" Type="Int32" />
-          <Property Name="DurumId" Type="Int32" />
           <NavigationProperty Name="Birim" Relationship="Self.FK_Kullanici_Birim" FromRole="Kullanici" ToRole="Birim" />
           <NavigationProperty Name="Yetki" Relationship="Self.FK_Kullanici_Yetki" FromRole="Kullanici" ToRole="Yetki" />
         </EntityType>
@@ -496,7 +490,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="HataBildirimModelMvcEntities2" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="HataBildirimModelMvcEntities3" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="C__EFMigrationsHistory" EntityType="Self.C__EFMigrationsHistory" />
           <EntitySet Name="Admin" EntityType="Self.Admin" />
           <EntitySet Name="ArızaBildirim" EntityType="Self.ArızaBildirim" />
@@ -549,7 +543,7 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="HataBildirimModelMvcModelStoreContainer" CdmEntityContainer="HataBildirimModelMvcEntities2">
+        <EntityContainerMapping StorageEntityContainer="HataBildirimModelMvcModelStoreContainer" CdmEntityContainer="HataBildirimModelMvcEntities3">
           <EntitySetMapping Name="C__EFMigrationsHistory">
             <EntityTypeMapping TypeName="HataBildirimModelMvcModel.C__EFMigrationsHistory">
               <MappingFragment StoreEntitySet="__EFMigrationsHistory">
@@ -565,7 +559,6 @@
                 <ScalarProperty Name="Ad" ColumnName="Ad" />
                 <ScalarProperty Name="Soyad" ColumnName="Soyad" />
                 <ScalarProperty Name="TelNo" ColumnName="TelNo" />
-                <ScalarProperty Name="Mail" ColumnName="Mail" />
                 <ScalarProperty Name="BirimId" ColumnName="BirimId" />
                 <ScalarProperty Name="AKullaniciAd" ColumnName="AKullaniciAd" />
                 <ScalarProperty Name="ASifre" ColumnName="ASifre" />
@@ -620,11 +613,9 @@
                 <ScalarProperty Name="Soyad" ColumnName="Soyad" />
                 <ScalarProperty Name="BirimId" ColumnName="BirimId" />
                 <ScalarProperty Name="TelNo" ColumnName="TelNo" />
-                <ScalarProperty Name="Mail" ColumnName="Mail" />
                 <ScalarProperty Name="KKullaniciAd" ColumnName="KKullaniciAd" />
                 <ScalarProperty Name="KSifre" ColumnName="KSifre" />
                 <ScalarProperty Name="YetkiId" ColumnName="YetkiId" />
-                <ScalarProperty Name="DurumId" ColumnName="DurumId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

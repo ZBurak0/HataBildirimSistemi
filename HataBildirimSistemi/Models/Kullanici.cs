@@ -11,20 +11,34 @@ namespace HataBildirimSistemi.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class Kullanici
     {
         public int Id { get; set; }
+
+        [Required(ErrorMessage = "Ad alaný zorunludur.")]
         public string Ad { get; set; }
+
+        [Required(ErrorMessage = "Soyad alaný zorunludur.")]
         public string Soyad { get; set; }
+
+        [Required(ErrorMessage = "Birim seçilmelidir.")]
         public Nullable<int> BirimId { get; set; }
+
+        [Required(ErrorMessage = "Telefon numarasý girilmelidir.")]
+        [StringLength(11, ErrorMessage = "Telefon numarasý en fazla 11 haneli olmalýdýr.")]
+        [RegularExpression(@"^\d{11}$", ErrorMessage = "Telefon numarasý sadece rakamlardan oluþmalý ve 11 haneli olmalýdýr.")]
         public string TelNo { get; set; }
-        public string Mail { get; set; }
+
+        [Required(ErrorMessage = "Kullanýcý adý girilmelidir.")]
+        [RegularExpression(@".+@akdeniz\.edu\.tr$", ErrorMessage = "Kullanýcý adý @akdeniz.edu.tr ile bitmelidir.")]
         public string KKullaniciAd { get; set; }
+
+        [Required(ErrorMessage = "Þifre girilmelidir.")]
+        [StringLength(20, MinimumLength = 6, ErrorMessage = "Þifre 6 ile 20 karakter arasýnda olmalýdýr.")]
         public string KSifre { get; set; }
         public Nullable<int> YetkiId { get; set; }
-        public Nullable<int> DurumId { get; set; }
-    
         public virtual Birim Birim { get; set; }
         public virtual Yetki Yetki { get; set; }
     }

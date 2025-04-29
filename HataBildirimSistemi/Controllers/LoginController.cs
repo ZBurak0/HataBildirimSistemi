@@ -4,12 +4,14 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using HataBildirimSistemi.Models;
+using BCrypt.Net;
+
 
 namespace HataBildirimSistemi.Controllers
 {
     public class LoginController : Controller
     {
-        HataBildirimModelMvcEntities2 entity = new HataBildirimModelMvcEntities2();
+        HataBildirimModelMvcEntities3 entity = new HataBildirimModelMvcEntities3();
         // GET: Login
         public ActionResult Index()
         {
@@ -21,21 +23,12 @@ namespace HataBildirimSistemi.Controllers
         public ActionResult Index(string KKullaniciAd, string KSifre)
         {
 
-            var kullanici = (from p in entity.Kullanici
-                             where p.KKullaniciAd == KKullaniciAd
-                             && p.KSifre == KSifre
-                             select p).FirstOrDefault();
+            // First check if username exists in any of the tables
+            var kullanici = entity.Kullanici.FirstOrDefault(p => p.KKullaniciAd == KKullaniciAd);
+            var admin = entity.Admin.FirstOrDefault(p => p.AKullaniciAd == KKullaniciAd);
+            var yetkiliServis = entity.YetkiliServis.FirstOrDefault(p => p.YKullaniciAd == KKullaniciAd);
 
-            var admin = (from p in entity.Admin
-                         where p.AKullaniciAd == KKullaniciAd
-                         && p.ASifre == KSifre
-                         select p).FirstOrDefault();
-
-            var yetkiliServis = (from p in entity.YetkiliServis
-                                 where p.YKullaniciAd == KKullaniciAd
-                                 && p.YSifre == KSifre
-                                 select p).FirstOrDefault();
-
+            // Check Kullanici table
             if (kullanici != null)
             {
                 Session["KId"] = kullanici.Id;
@@ -59,9 +52,19 @@ namespace HataBildirimSistemi.Controllers
                             return RedirectToAction("Ag", "Admin");
                     }
                 }
+                else
+                {
+                    ViewBag.Mesaj = "Kullanıcı adı veya şifre yanlış.";
+                    return View();
+                }
             }
+
+            // Check Admin table
             if (admin != null)
             {
+                Session["AId"] = admin.Id;
+                Session["AAd"] = admin.Ad;
+
                 Session["ABirimId"] = admin.BirimId;
                 Session["AYetkiId"] = admin.YetkiId;
 
@@ -81,7 +84,14 @@ namespace HataBildirimSistemi.Controllers
                 {
                     return RedirectToAction("Index", "GenelAdmin");
                 }
+                else
+                {
+                    ViewBag.Mesaj = "Kullanıcı adı veya şifre yanlış.";
+                    return View();
+                }
             }
+
+            // Check YetkiliServis table
             if (yetkiliServis != null)
             {
                 Session["YYetkiId"] = yetkiliServis.YetkiId;
@@ -100,11 +110,57 @@ namespace HataBildirimSistemi.Controllers
                             return RedirectToAction("Donanim", "YetkiliServis");
                     }
                 }
+                else
+                {
+                    ViewBag.Mesaj = "Kullanıcı adı veya şifre yanlış.";
+                    return View();
+                }
             }
+
             ViewBag.Mesaj = "Kullanıcı adı veya şifre yanlış.";
             return View();
         }
+        public ActionResult Register()
+        {
+            ViewBag.BirimList = entity.Birim.ToList();
+            return View(new Kullanici());
+        }
 
+        [HttpPost]
+        public ActionResult Register(Kullanici yeniKullanici)
+        {
+            if (ModelState.IsValid)
+            {
+                if (!yeniKullanici.KKullaniciAd.EndsWith("@akdeniz.edu.tr"))
+                {
+                    ModelState.AddModelError("KKullaniciAd", "Kullanıcı adı @akdeniz.edu.tr ile bitmelidir.");
+                }
+
+                var mevcutKullanici = entity.Kullanici.FirstOrDefault(x => x.KKullaniciAd == yeniKullanici.KKullaniciAd);
+                if (mevcutKullanici != null)
+                {
+                    ModelState.AddModelError("KKullaniciAd", "Bu kullanıcı adı zaten alınmış.");
+                }
+
+                if (ModelState.IsValid)
+                {
+                    // Şifreyi hashle
+                    //yeniKullanici.KSifre = BCrypt.Net.BCrypt.HashPassword(yeniKullanici.KSifre);
+
+                    // Varsayılan yetki ata
+                    yeniKullanici.YetkiId = 2;
+
+                    // Veritabanına kaydet
+                    entity.Kullanici.Add(yeniKullanici);
+                    entity.SaveChanges();
+
+                    return RedirectToAction("Index", "Login");
+                }
+            }
+
+            ViewBag.BirimList = entity.Birim.ToList();
+            return View(yeniKullanici);
+        }
 
     }
 }

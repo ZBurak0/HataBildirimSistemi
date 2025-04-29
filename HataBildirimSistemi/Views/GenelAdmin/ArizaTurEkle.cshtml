@@ -1,0 +1,43 @@
+﻿
+@{
+    ViewBag.Title = "ArizaTurEkle";
+    Layout = "~/Views/Shared/_LayoutGenelAdmin.cshtml";
+}
+
+<h2>Arıza Türü Ekle / Çıkar</h2>
+
+@using (Html.BeginForm("ArizaTurEkle", "GenelAdmin", FormMethod.Post))
+{
+    <div class="form-group">
+        <label for="TurAd">Arıza Türü Adı:</label>
+        <input type="text" name="TurAd" id="TurAd" class="form-control" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Ekle</button>
+}
+
+<h3>Mevcut Arıza Türleri</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Arıza Türü Adı</th>
+            <th>Aksiyonlar</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var ArızaTur in Model.ArizaTurleri)
+        {
+            <tr>
+                <td>@ArızaTur.Ad</td>
+                <td>
+                    @using (Html.BeginForm("ArizaTurSil", "GenelAdmin", FormMethod.Post))
+                    {
+                        <!-- Dinamik Id için manuel hidden input -->
+                        <input type="hidden" name="Id" value="@ArızaTur.Id" />
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('Bu arıza türünü silmek istediğinize emin misiniz?');">Sil</button>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

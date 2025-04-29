@@ -18,7 +18,6 @@ namespace HataBildirimSistemi.Models
         public string Ad { get; set; }
         public string Soyad { get; set; }
         public string TelNo { get; set; }
-        public string Mail { get; set; }
         public Nullable<int> BirimId { get; set; }
         public string AKullaniciAd { get; set; }
         public string ASifre { get; set; }

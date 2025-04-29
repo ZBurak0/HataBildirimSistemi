@@ -51,8 +51,6 @@ namespace HataBildirimSistemi.Models
                     .HasColumnName("ASifre")
                     .HasMaxLength(500);
 
-                entity.Property(e => e.Mail).HasMaxLength(50);
-
                 entity.Property(e => e.Soyad).HasMaxLength(50);
 
                 entity.Property(e => e.TelNo)

@@ -1,20 +1,19 @@
 ﻿using HataBildirimSistemi.Models;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+
+
 
 namespace HataBildirimSistemi.Controllers
 {
 
     public class KullaniciController : Controller
     {
-        HataBildirimModelMvcEntities2 entity = new HataBildirimModelMvcEntities2();
+        HataBildirimModelMvcEntities3 entity = new HataBildirimModelMvcEntities3();
         // GET: Kullanici
         public ActionResult Bildirim()
         {
@@ -118,5 +117,53 @@ namespace HataBildirimSistemi.Controllers
 
             return View(arizalarr.ToList());
         }
+        public ActionResult Profil()
+        {
+            int? kullaniciId = Session["KId"] as int?;
+            if (kullaniciId == null)
+            {
+                return RedirectToAction("Index", "Login"); // Giriş yapmamışsa login sayfasına yönlendir
+            }
+            var kullanici = entity.Kullanici.FirstOrDefault(a => a.Id == kullaniciId);
+            if (kullanici == null)
+            {
+                return HttpNotFound();
+            }
+            return View(kullanici);
+        }
+        [HttpGet]
+        public ActionResult Duzenle(int id)
+        {
+            var kullanici = entity.Kullanici.Find(id);
+            if (kullanici == null)
+            {
+                return HttpNotFound();
+            }
+            return View(kullanici);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Duzenle(Kullanici model)
+        {
+            if (ModelState.IsValid)
+            {
+                var kullanici = entity.Kullanici.Find(model.Id);
+                if (kullanici != null)
+                {
+                    kullanici.Ad = model.Ad;
+                    kullanici.Soyad = model.Soyad;
+                    kullanici.TelNo = model.TelNo;
+                    kullanici.KSifre = model.KSifre;
+
+                    entity.SaveChanges();
+                    return RedirectToAction("Profil");
+                }
+            }
+
+            return View(model);
+        }
     }
-}
+    //opensource anket uygulaması 
+    //gorselliği kullan 
+    }

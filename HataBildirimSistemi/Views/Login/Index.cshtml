@@ -72,19 +72,23 @@
         transition: all 0.3s ease-in-out;
     }
 
-    .btn-login:hover {
-        background: #3b3fc0;
-    }
+        .btn-login:hover {
+            background: #3b3fc0;
+        }
 
     fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(-20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        from
+
+    {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
     }
 
     .forgot {
@@ -92,6 +96,22 @@
         font-size: 0.9rem;
         margin-top: 20px;
     }
+
+    .btn-register {
+        background: #ff6347; /* Kayıt butonu için farklı renk */
+        color: white;
+        border: none;
+        border-radius: 12px;
+        padding: 14px;
+        font-weight: 500;
+        font-size: 1.1rem;
+        margin-top: 20px;
+        transition: all 0.3s ease-in-out;
+    }
+
+        .btn-register:hover {
+            background: #e55347;
+        }
 </style>
 
 @using (Html.BeginForm("Index", "Login", FormMethod.Post))
@@ -117,7 +137,10 @@
             <a href="#">Şifremi Unuttum?</a>
         </div>
 
-        <button type="submit" class="btn btn-primary">Kayıt Ol</button>
+        @* Kayıt ol butonunu ekliyoruz *@
+        <div class="d-grid">
+            <a href="@Url.Action("Register", "Login")" class="btn btn-register">Kayıt Ol</a>
+        </div>
 
         @* Sadece mesaj varsa alert kutusunu göster *@
         @if (!string.IsNullOrEmpty(ViewBag.Mesaj as string))

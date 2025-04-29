@@ -13,10 +13,10 @@ namespace HataBildirimSistemi.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class HataBildirimModelMvcEntities2 : DbContext
+    public partial class HataBildirimModelMvcEntities3 : DbContext
     {
-        public HataBildirimModelMvcEntities2()
-            : base("name=HataBildirimModelMvcEntities2")
+        public HataBildirimModelMvcEntities3()
+            : base("name=HataBildirimModelMvcEntities3")
         {
         }
     

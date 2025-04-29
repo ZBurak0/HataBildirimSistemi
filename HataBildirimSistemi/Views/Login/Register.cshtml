@@ -1,0 +1,114 @@
+﻿@model HataBildirimSistemi.Models.Kullanici
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Kayıt Ol";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+<style>
+    body {
+        background: linear-gradient(135deg, #4e54c8, #8f94fb);
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: 'Segoe UI', sans-serif;
+        margin: 0;
+    }
+
+    .register-card {
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        width: 100%;
+        max-width: 550px;
+        min-height: 500px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+        animation: fadeIn 0.5s ease-in-out;
+    }
+
+    .register-title {
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 30px;
+        text-align: center;
+        font-size: 1.8rem;
+    }
+
+    .form-control {
+        border-radius: 12px;
+        height: 48px;
+        font-size: 1rem;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .btn-register {
+        background: #4e54c8;
+        color: white;
+        border: none;
+        border-radius: 12px;
+        padding: 12px;
+        font-weight: 500;
+        font-size: 1.1rem;
+        width: 100%;
+        transition: all 0.3s ease-in-out;
+    }
+
+        .btn-register:hover {
+            background: #3b3fc0;
+        }
+</style>
+
+<div class="register-card">
+    <h2 class="register-title">Kayıt Ol</h2>
+
+    @using (Html.BeginForm("Register", "Login", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Ad)
+            @Html.TextBoxFor(model => model.Ad, new { @class = "form-control", placeholder = "Ad" })
+            @Html.ValidationMessageFor(model => model.Ad)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Soyad)
+            @Html.TextBoxFor(model => model.Soyad, new { @class = "form-control", placeholder = "Soyad" })
+            @Html.ValidationMessageFor(model => model.Soyad)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.TelNo)
+            @Html.TextBoxFor(model => model.TelNo, new { @class = "form-control", placeholder = "Telefon Numarası" })
+            @Html.ValidationMessageFor(model => model.TelNo)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.KKullaniciAd)
+            @Html.TextBoxFor(model => model.KKullaniciAd, new { @class = "form-control", placeholder = "Kullanıcı Adı (e-posta)" })
+            @Html.ValidationMessageFor(model => model.KKullaniciAd)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.KSifre)
+            @Html.PasswordFor(model => model.KSifre, new { @class = "form-control", placeholder = "Şifre" })
+            @Html.ValidationMessageFor(model => model.KSifre)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.BirimId)
+            @Html.DropDownListFor(model => model.BirimId, new SelectList(ViewBag.BirimList, "Id", "Ad"), "Birimi Seçin", new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.BirimId)
+        </div>
+
+        <div class="form-group">
+            <input type="submit" value="Kayıt Ol" class="btn btn-register" />
+        </div>
+    }
+</div>

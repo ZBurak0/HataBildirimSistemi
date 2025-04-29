@@ -1,0 +1,49 @@
+﻿
+@{
+    ViewBag.Title = "Yetkilendirme";
+    Layout = "~/Views/Shared/_LayoutGenelAdmin.cshtml";
+}
+
+@model HataBildirimSistemi.Models.AdminPanelViewModel
+
+<h2>Admin Yetkilendirme Paneli</h2>
+
+<h3>Kullanıcılar</h3>
+<table border="1" cellpadding="5" cellspacing="0">
+    <tr>
+        <th>Ad</th>
+        <th>Soyad</th>
+        <th>Birim</th>
+        <th>İşlemler</th>
+    </tr>
+    @foreach (var k in Model.Kullanicilar)
+    {
+        <tr>
+            <td>@k.Ad</td>
+            <td>@k.Soyad</td>
+            <td>@k.Birim.Ad</td>
+            <td>
+                @Html.ActionLink("Admin Yap", "KullaniciyiAdminYap", new { id = k.Id }) |
+                @Html.ActionLink("Sil", "KullaniciSil", new { id = k.Id })
+            </td>
+        </tr>
+    }
+</table>
+
+<h3>Adminler</h3>
+<table border="1" cellpadding="5" cellspacing="0">
+    <tr>
+        <th>Ad</th>
+        <th>Soyad</th>
+        <th>İşlem</th>
+    </tr>
+    @foreach (var a in Model.Adminler)
+    {
+        <tr>
+            <td>@a.Ad</td>
+            <td>@a.Soyad</td>
+            <td>@Html.ActionLink("Kullanıcı Yap", "AdminiKullaniciYap", new { id = a.Id })</td>
+        </tr>
+    }
+</table>
+

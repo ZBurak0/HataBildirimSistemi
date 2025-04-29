@@ -45,6 +45,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BCrypt.Net-Next, Version=4.0.3.0, Culture=neutral, PublicKeyToken=1e11be04b6288443, processorArchitecture=MSIL">
+      <HintPath>..\packages\BCrypt.Net-Next.4.0.3\lib\net472\BCrypt.Net-Next.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.5.1\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -255,6 +258,15 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20250426123959_UpdateKullaniciForModels.cs" />
+    <Compile Include="Migrations\20250426123959_UpdateKullaniciForModels.Designer.cs">
+      <DependentUpon>20250426123959_UpdateKullaniciForModels.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20250429055932_UpdateKullaniciForModelss.cs" />
+    <Compile Include="Migrations\20250429055932_UpdateKullaniciForModelss.Designer.cs">
+      <DependentUpon>20250429055932_UpdateKullaniciForModelss.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\HataBildirimModelMvcContextModelSnapshot.cs" />
     <Compile Include="Models\Admin.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -345,6 +357,13 @@
     <Content Include="Views\GenelAdmin\Index.cshtml" />
     <Content Include="Views\GenelAdmin\YetkiliServisEkle.cshtml" />
     <Content Include="Views\GenelAdmin\ArızaGoruntuleme.cshtml" />
+    <Content Include="Views\Kullanici\Profil.cshtml" />
+    <Content Include="Views\Kullanici\Duzenle.cshtml" />
+    <Content Include="Views\Login\Register.cshtml" />
+    <Content Include="Views\GenelAdmin\ArizaTurEkle.cshtml" />
+    <Content Include="Views\GenelAdmin\BirimEkle.cshtml" />
+    <Content Include="Views\GenelAdmin\Yetkilendirme.cshtml" />
+    <Content Include="Views\GenelAdmin\AProfil.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -354,7 +373,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Migrations\" />
     <Folder Include="Uploads\" />
   </ItemGroup>
   <ItemGroup>
