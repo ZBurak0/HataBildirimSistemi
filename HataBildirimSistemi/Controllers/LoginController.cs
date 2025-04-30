@@ -42,15 +42,16 @@ namespace HataBildirimSistemi.Controllers
                 }
                 if (kullanici.YetkiId == 1)
                 {
-                    switch (kullanici.BirimId)
-                    {
-                        case 1:
-                            return RedirectToAction("Yazilim", "Admin");
-                        case 2:
-                            return RedirectToAction("Sistem", "Admin");
-                        case 3:
-                            return RedirectToAction("Ag", "Admin");
-                    }
+                    return RedirectToAction("ArizaGoruntule", "BirimAdmin");
+                    //switch (kullanici.BirimId)
+                    //{
+                    //    case 1:
+                    //        return RedirectToAction("YArizaGoruntuleme", "YazilimAdmin");
+                    //    case 2:
+                    //        return RedirectToAction("SArizaGoruntuleme", "SistemAdmin");
+                    //    case 3:
+                    //        return RedirectToAction("AArizaGoruntuleme", "AgAdmin");
+                    //}
                 }
                 else
                 {
@@ -70,15 +71,16 @@ namespace HataBildirimSistemi.Controllers
 
                 if (admin.YetkiId == 1)
                 {
-                    switch (admin.BirimId)
-                    {
-                        case 1:
-                            return RedirectToAction("Yazilim", "Admin");
-                        case 2:
-                            return RedirectToAction("Sistem", "Admin");
-                        case 3:
-                            return RedirectToAction("Ag", "Admin");
-                    }
+                    return RedirectToAction("ArizaGoruntule", "BirimAdmin");
+                    //switch (admin.BirimId)
+                    //{
+                    //    case 1:
+                    //        return RedirectToAction("YArizaGoruntuleme", "YazilimAdmin");
+                    //    case 2:
+                    //        return RedirectToAction("SArizaGoruntuleme", "SistemAdmin");
+                    //    case 3:
+                    //        return RedirectToAction("AArizaGoruntuleme", "AgAdmin");
+                    //}
                 }
                 if (admin.YetkiId == 4 && admin.BirimId == 4)
                 {
@@ -162,5 +164,66 @@ namespace HataBildirimSistemi.Controllers
             return View(yeniKullanici);
         }
 
+        // Şifremi Unuttum (GET)
+        public ActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        // Şifremi Unuttum (POST)
+        [HttpPost]
+        public ActionResult ForgotPassword(string KKullaniciAd)
+        {
+            var kullanici = entity.Kullanici.FirstOrDefault(x => x.KKullaniciAd == KKullaniciAd);
+            if (kullanici == null)
+            {
+                ViewBag.Message = "Böyle bir kullanıcı bulunamadı.";
+                return View();
+            }
+
+            string kod = new Random().Next(100000, 999999).ToString();
+            TempData["OnayKodu"] = kod;
+            TempData["KKullaniciAd"] = KKullaniciAd;
+
+            ViewBag.Message = $"Onay Kodunuz: {kod} (Demo amaçlı burada gösterilmektedir)";
+            return View("OnayKoduGir");
+        }
+
+        // Onay Kodu Doğrulama (POST)
+        [HttpPost]
+        public ActionResult VerifyCode(string kod)
+        {
+            if (TempData["OnayKodu"] != null && kod == TempData["OnayKodu"].ToString())
+            {
+                string kullaniciAd = TempData["KKullaniciAd"]?.ToString();
+                return RedirectToAction("ResetPassword", new { kullaniciAd });
+            }
+
+            ViewBag.Hata = "Onay kodu geçersiz!";
+            return View("OnayKoduGir");
+        }
+
+        // Yeni Şifre Sayfası (GET)
+        public ActionResult ResetPassword(string kullaniciAd)
+        {
+            return View((object)kullaniciAd);
+        }
+
+        // Yeni Şifre Kaydetme (POST)
+        [HttpPost]
+        public ActionResult ResetPassword(string kullaniciAd, string yeniSifre)
+        {
+            var kullanici = entity.Kullanici.FirstOrDefault(x => x.KKullaniciAd == kullaniciAd);
+            if (kullanici != null)
+            {
+                kullanici.KSifre = yeniSifre;
+                entity.SaveChanges();
+                ViewBag.Message = "Şifreniz başarıyla güncellendi.";
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.Message = "Bir hata oluştu.";
+            return View();
+        }
     }
 }

@@ -1,15 +1,4 @@
-﻿using HataBildirimSistemi.Models;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Metadata;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-
-namespace HataBildirimSistemi
-{
-    public class YetkilendirmeKodlarics
-    {
+﻿
         /* Yetkilendirme Paneli
         public ActionResult Yetkilendirme()
         {
@@ -157,5 +146,36 @@ namespace HataBildirimSistemi
          
          
          */
-    }
-}
+
+
+
+
+//    // GET: ForgotPassword
+//    public ActionResult ForgotPassword()
+//    {
+//        ViewBag.Mesaj = "";
+//        return View();
+//    }
+
+//    // POST: ForgotPassword
+//    [HttpPost]
+//    public ActionResult ForgotPassword(string email)
+//    {
+//        var kullanici = entity.Kullanici.FirstOrDefault(k => k.KKullaniciAd == email);
+//        if (kullanici != null)
+//        {
+//            // Basit yeni şifre üret (örnek: 6 karakterli)
+//            var yeniSifre = Guid.NewGuid().ToString("N").Substring(0, 6);
+//            kullanici.KSifre = yeniSifre; // Gerçek projede hashlenmeli!
+//            entity.SaveChanges();
+
+//            ViewBag.Mesaj = $"Yeni şifreniz: {yeniSifre}";
+//        }
+//        else
+//        {
+//            ViewBag.Mesaj = "Bu e-posta ile kayıtlı kullanıcı bulunamadı.";
+//        }
+
+//        return View();
+//    }
+//}

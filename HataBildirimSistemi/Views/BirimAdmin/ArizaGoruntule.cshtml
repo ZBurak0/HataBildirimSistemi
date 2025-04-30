@@ -1,0 +1,88 @@
+﻿@{
+    ViewBag.Title = "ArizaGoruntule";
+    Layout = "~/Views/Shared/_LayoutBirimAdmin.cshtml";
+}
+@model List<HataBildirimSistemi.Models.ArızaBildirim>
+
+<div class="container mt-5">
+    <h2 class="mb-4" style="color: #FFB6A4;">Birim Arızaları</h2> <!-- Pastel Turuncu -->
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert" style="background-color: #A8D8FF; color: #004E89;">
+            <!-- Pastel Mavi -->
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    @using (Html.BeginForm("ArizaGoruntule", "BirimAdmin", FormMethod.Post))
+    {
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <label class="form-label" style="color: #A8D8FF;">Arıza Türü</label> <!-- Pastel Mavi -->
+                @Html.DropDownList("ArizaTurId", (SelectList)ViewBag.Arizalar, "Tümü", new { @class = "form-select" })
+            </div>
+            <div class="col-md-4 d-flex align-items-end">
+                <button type="submit" class="btn" style="background-color: #A8D8FF; color: #004E89;">Filtrele</button> <!-- Pastel Mavi -->
+            </div>
+        </div>
+    }
+
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered align-middle" style="border-radius: 8px; overflow: hidden; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+            <thead style="background-color: #A8D8FF;" class="text-center">
+                <!-- Pastel Mavi -->
+                <tr>
+                    <th class="text-white">ID</th>
+                    <th class="text-white">Ad</th>
+                    <th class="text-white">Arıza Türü</th>
+                    <th class="text-white">Birim</th>
+                    <th class="text-white">Açıklama</th>
+                    <th class="text-white">Dosya</th>
+                    <th class="text-white">Tarih</th>
+                    <th class="text-white">Durum</th>
+                    <th class="text-white">İşlem</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr style="transition: background-color 0.3s ease, box-shadow 0.3s ease;" onmouseover="this.style.backgroundColor='#FFFAF2'; this.style.boxShadow='0 0 10px rgba(0, 0, 0, 0.1)'" onmouseout="this.style.backgroundColor=''; this.style.boxShadow='';">
+                        <td class="text-center">@item.Id</td>
+                        <td>@item.Ad</td>
+                        <td>@item.ArızaTur.Ad</td>
+                        <td>@item.Birim.Ad</td>
+                        <td>@item.Aciklama</td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(item.DosyaYolu))
+                            {
+                                <a href="@item.DosyaYolu" target="_blank" class="btn btn-sm btn-link" style="color: #FFB6A4;">Görüntüle</a> <!-- Pastel Turuncu -->
+                            }
+                            else
+                            {
+                                <span class="text-muted">Yok</span>
+                            }
+                        </td>
+                        <td>@item.Tarih.ToString()</td>
+                        <td>
+                            @item.Durum.Ad
+                        </td>
+                        <td>
+                            @using (Html.BeginForm("DurumDegistir", "BirimAdmin", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.Hidden("arizaId", item.Id)
+
+                                @Html.DropDownList("durumId",
+                                    new SelectList(ViewBag.Durumlar, "Id", "Ad", item.DurumId),
+                                    new { @class = "form-select form-select-sm mb-1" })
+
+                                <button type="submit" class="btn btn-sm" style="background-color: #A8D8FF; color: #004E89;">Güncelle</button> <!-- Pastel Mavi -->
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

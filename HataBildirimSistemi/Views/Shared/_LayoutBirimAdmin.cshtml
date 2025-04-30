@@ -5,18 +5,18 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
+
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>@ViewBag.Title - Birim Admin Panel</title>
     <link href="~/Content/theme.css" rel="stylesheet" />
-
     <!-- Bootstrap CSS & Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
 
     <style>
         body {
-            font-size: 1.3rem; /* Genel yazı boyutunu artırdık */
+            font-size: 1.3rem; /* Genel yazı boyutunu biraz daha büyüttük */
         }
 
         .navbar {
@@ -51,9 +51,17 @@
             margin-top: 30px; /* Tabloya daha fazla boşluk ekledik */
         }
 
+        /* Başlıkların boyutlarını artırdık */
         h2, h3 {
             font-size: 2.5rem; /* Başlık yazı boyutunu 2 katına çıkardık */
             font-weight: 700; /* Yazı tipini kalın yaptık */
+        }
+
+        /* Arızalar başlığını daha belirgin hale getirdik */
+        .arizalar-header {
+            font-size: 3rem; /* Arızalar başlığını büyüttük */
+            font-weight: 800; /* Daha kalın yaptık */
+            margin-bottom: 30px; /* Arızalar başlığı ile içerik arasında boşluk */
         }
 
         /* Navbar butonlarını büyütme ve kalınlaştırma */
@@ -61,17 +69,6 @@
             font-size: 1.5rem; /* Linkleri daha büyük yapıyoruz */
             font-weight: 700; /* Linkleri kalın yapıyoruz */
             padding: 15px 20px; /* Butonların etrafına ekstra boşluk ekledik */
-        }
-
-        /* Dropdown menüsündeki item'ları da büyüttük */
-        .dropdown-menu .dropdown-item {
-            font-size: 1.4rem; /* Dropdown menüsündeki item'ları büyüttük */
-            padding: 10px 20px; /* Item'ların etrafına boşluk ekledik */
-        }
-
-        /* Dropdown menüsüne hover etkisi ekledik */
-        .dropdown-item:hover {
-            background-color: #B8D5FF; /* Hover durumunda pastel mavi arka plan */
         }
     </style>
 </head>
@@ -91,16 +88,13 @@
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        @Html.ActionLink("Arıza Bildirim", "Bildirim", "Kullanici", null, new { @class = "nav-link text-white" })
+                        @Html.ActionLink("Arızalar", "ArizaGoruntule", "BirimAdmin", null, new { @class = "nav-link text-white" })
                     </li>
                     <li class="nav-item">
-                        @Html.ActionLink("Bildirim geçmişi", "Listeleme", "Kullanici", null, new { @class = "nav-link text-white" })
+                        @Html.ActionLink("Profil", "BAProfil", "BirimAdmin", null, new { @class = "nav-link text-white" })
                     </li>
                     <li class="nav-item">
-                        @Html.ActionLink("Profil", "Profil", "Kullanici", null, new { @class = "nav-link text-white" })
-                    </li>
-                    <li class="nav-item">
-                        @Html.ActionLink("Çıkış yap", "LogOut", "Kullanici", null, new { @class = "nav-link text-white" })
+                        @Html.ActionLink("Çıkış yap", "LogOut", "BirimAdmin", null, new { @class = "nav-link text-white" })
                     </li>
                 </ul>
             </div>
@@ -109,6 +103,7 @@
 
     <!-- Sayfa içeriği -->
     <main class="container mt-4">
+        <h2 class="arizalar-header">Arızalar</h2> <!-- Arızalar başlığını daha belirgin hale getirdik -->
         @RenderBody()
     </main>
 

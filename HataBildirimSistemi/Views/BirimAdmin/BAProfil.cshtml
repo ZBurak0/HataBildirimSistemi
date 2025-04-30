@@ -1,8 +1,10 @@
-﻿@model HataBildirimSistemi.Models.Admin
+﻿
 @{
-    ViewBag.Title = "AProfil";
-    Layout = "~/Views/Shared/_LayoutGenelAdmin.cshtml";
+    ViewBag.Title = "BAProfil";
+    Layout = "~/Views/Shared/_LayoutBirimAdmin.cshtml";
 }
+
+@model HataBildirimSistemi.Models.Admin
 
 <h2 class="mt-4">Profil Bilgilerim</h2>
 
@@ -36,6 +38,5 @@
         <td>@Model.ASifre</td>
     </tr>
 </table>
-<a href="@Url.Action("Duzenle", "GenelAdmin", new { id = Model.Id })" class="btn btn-warning">
+<a href="@Url.Action("Duzenle", "BirimAdmin", new { id = Model.Id })" class="btn btn-warning">
     Düzenle
-

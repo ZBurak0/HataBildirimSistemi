@@ -11,7 +11,8 @@ namespace HataBildirimSistemi.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class Admin
     {
         public int Id { get; set; }
@@ -20,6 +21,9 @@ namespace HataBildirimSistemi.Models
         public string TelNo { get; set; }
         public Nullable<int> BirimId { get; set; }
         public string AKullaniciAd { get; set; }
+
+        [Required]
+        [StringLength(20, MinimumLength = 6, ErrorMessage = "Þifre 6 ile 20 karakter arasýnda olmalýdýr.")]
         public string ASifre { get; set; }
         public Nullable<int> YetkiId { get; set; }
     

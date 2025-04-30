@@ -1,21 +1,94 @@
-﻿
-@{
+﻿@{
     Layout = null;
 }
 
 <!DOCTYPE html>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-
-<html>
+<html lang="tr">
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>_LayoutAdmin</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewBag.Title - Admin Panel</title>
+    <link href="~/Content/theme.css" rel="stylesheet" />
+
+    <!-- Bootstrap CSS & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+
+    <style>
+        body {
+            font-size: 1.3rem; /* Genel yazı boyutunu artırdık */
+        }
+
+        .navbar {
+            font-size: 1.2rem; /* Navbar yazı boyutunu artırdık */
+        }
+
+        .navbar-brand {
+            font-size: 1.8rem; /* Navbar başlık boyutunu büyüttük */
+        }
+
+        .nav-link {
+            font-size: 1.4rem; /* Navbar linklerinin yazı boyutunu artırdık */
+            font-weight: 600; /* Navbar linklerini kalınlaştırdık */
+            padding: 10px 15px; /* Linklerin etrafına biraz boşluk ekledik */
+        }
+
+            .nav-link:hover {
+                background-color: #B8D5FF; /* Hover durumunda pastel mavi arka plan ekledik */
+            }
+
+        main {
+            font-size: 1.2rem; /* Sayfa içeriği yazı boyutunu büyüttük */
+        }
+
+        table th, table td {
+            font-size: 1.2rem; /* Tablo başlıkları ve hücre yazı boyutlarını artırdık */
+            padding: 20px; /* Hücrelerin içine daha fazla boşluk ekledik */
+        }
+
+        table {
+            width: 100%;
+            margin-top: 30px; /* Tabloya daha fazla boşluk ekledik */
+        }
+
+        h2, h3 {
+            font-size: 2.5rem; /* Başlık yazı boyutunu 2 katına çıkardık */
+            font-weight: 700; /* Yazı tipini kalın yaptık */
+        }
+
+        /* Arızalar başlığını daha belirgin hale getirdik */
+        .arizalar-header {
+            font-size: 3rem; /* Arızalar başlığını büyüttük */
+            font-weight: 800; /* Daha kalın yaptık */
+            margin-bottom: 30px; /* Arızalar başlığı ile içerik arasında boşluk */
+        }
+
+        /* Navbar butonlarını büyütme ve kalınlaştırma */
+        .navbar-nav .nav-item .nav-link {
+            font-size: 1.5rem; /* Linkleri daha büyük yapıyoruz */
+            font-weight: 700; /* Linkleri kalın yapıyoruz */
+            padding: 15px 20px; /* Butonların etrafına ekstra boşluk ekledik */
+        }
+
+        /* Dropdown menüsündeki item'ları da büyüttük */
+        .dropdown-menu .dropdown-item {
+            font-size: 1.4rem; /* Dropdown menüsündeki item'ları büyüttük */
+            padding: 10px 20px; /* Item'ların etrafına boşluk ekledik */
+        }
+
+        /* Dropdown menüsüne hover etkisi ekledik */
+        .dropdown-item:hover {
+            background-color: #B8D5FF; /* Hover durumunda pastel mavi arka plan */
+        }
+    </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm px-4">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #A9C8FF;">
+        <!-- pastel mavi -->
         <div class="container-fluid">
-            <a class="navbar-brand fw-bold text-primary" href="#">
-                <i class="fas fa-tools me-2"></i>Proje Adı
+            <a class="navbar-brand fw-bold text-white" href="#">
+                <i class="bi bi-tools me-2"></i>Admin Panel
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -24,27 +97,53 @@
 
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav">
-                    <!-- Menü bağlantılarını buraya ekle -->
                     <li class="nav-item">
-                        @Html.ActionLink("Arıza Görüntüleme", "ArızaGoruntuleme", "GenelAdmin", new { }, new { @class = "nav-Link" })
+                        @Html.ActionLink("Arızalar", "ArızaGoruntuleme", "GenelAdmin", null, new { @class = "nav-link text-white" })
+                    </li>
+
+                    <!-- Yetki Dropdown -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white" href="#" id="yetkiDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Yetki
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Yetkili Servis Ekle", "YetkiliServisEkle", "GenelAdmin", null, new { @class = "dropdown-item" })</li>
+                            <li>@Html.ActionLink("Yetkilendirme", "Yetkilendirme", "GenelAdmin", null, new { @class = "dropdown-item" })</li>
+                        </ul>
+                    </li>
+
+                    <!-- Düzenleme Dropdown -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white" href="#" id="duzenlemeDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Düzenleme
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Birim Ekle", "BirimEkle", "GenelAdmin", null, new { @class = "dropdown-item" })</li>
+                            <li>@Html.ActionLink("Arıza Türü Ekle", "ArizaTurEkle", "GenelAdmin", null, new { @class = "dropdown-item" })</li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item">
+                        @Html.ActionLink("Rapor", "ArizaRaporuIndir", "GenelAdmin", null, new { @class = "nav-link text-white" })
+                    </li>
+
+                    <li class="nav-item">
+                        @Html.ActionLink("Profil", "AProfil", "GenelAdmin", null, new { @class = "nav-link text-white" })
                     </li>
                     <li class="nav-item">
-                        @Html.ActionLink("Yetkili Servis Ekle", "YetkiliServisEkle", "GenelAdmin", new { }, new { @class = "nav-Link" })
+                        @Html.ActionLink("Çıkış yap", "LogOut", "GenelAdmin", null, new { @class = "nav-link text-white" })
                     </li>
-                    <li class="nav-item">
-                        @Html.ActionLink("Düzenleme", "Düzenleme", "GenelAdmin", new { }, new { @class = "nav-Link" })
-                    </li>
-                    <li class="nav-item">
-                        @Html.ActionLink("Profil", "AProfil", "GenelAdmin", new { }, new { @class = "nav-Link" })
-                    </li>
-                    <!--Raporlama actionu da eklenecek-->
                 </ul>
             </div>
         </div>
     </nav>
-    <main role="main" class="container">
+
+    <!-- Sayfa içeriği -->
+    <main class="container mt-4">
         @RenderBody()
     </main>
 
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

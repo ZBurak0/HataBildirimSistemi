@@ -1,6 +1,6 @@
 ﻿@model HataBildirimSistemi.Models.Kullanici
 @{
-    ViewBag.Title = "Listeleme";
+    ViewBag.Title = "Profil";
     Layout = "~/Views/Shared/_LayoutKullanici.cshtml";
 }
 
@@ -16,8 +16,20 @@
         <td>@Model.Soyad</td>
     </tr>
     <tr>
+        <th>Çalıştığı birim</th>
+        <td>@Model.Birim.Ad</td>
+    </tr>
+    <tr>
+        <th>Yetkisi</th>
+        <td>@Model.Yetki.Ad</td>
+    </tr>
+    <tr>
         <th>Telefon</th>
         <td>@Model.TelNo</td>
+    </tr>
+    <tr>
+        <th>Kullanıcı Ad</th>
+        <td>@Model.KKullaniciAd</td>
     </tr>
     <tr>
         <th>Şifre</th>

@@ -1,49 +1,71 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Yetkilendirme";
     Layout = "~/Views/Shared/_LayoutGenelAdmin.cshtml";
 }
 
 @model HataBildirimSistemi.Models.AdminPanelViewModel
 
-<h2>Admin Yetkilendirme Paneli</h2>
+<div class="container mt-4">
 
-<h3>Kullanıcılar</h3>
-<table border="1" cellpadding="5" cellspacing="0">
-    <tr>
-        <th>Ad</th>
-        <th>Soyad</th>
-        <th>Birim</th>
-        <th>İşlemler</th>
-    </tr>
-    @foreach (var k in Model.Kullanicilar)
-    {
-        <tr>
-            <td>@k.Ad</td>
-            <td>@k.Soyad</td>
-            <td>@k.Birim.Ad</td>
-            <td>
-                @Html.ActionLink("Admin Yap", "KullaniciyiAdminYap", new { id = k.Id }) |
-                @Html.ActionLink("Sil", "KullaniciSil", new { id = k.Id })
-            </td>
-        </tr>
-    }
-</table>
+    <h2 class="mb-4 text-primary">Admin Yetkilendirme Paneli</h2>
 
-<h3>Adminler</h3>
-<table border="1" cellpadding="5" cellspacing="0">
-    <tr>
-        <th>Ad</th>
-        <th>Soyad</th>
-        <th>İşlem</th>
-    </tr>
-    @foreach (var a in Model.Adminler)
-    {
-        <tr>
-            <td>@a.Ad</td>
-            <td>@a.Soyad</td>
-            <td>@Html.ActionLink("Kullanıcı Yap", "AdminiKullaniciYap", new { id = a.Id })</td>
-        </tr>
-    }
-</table>
+    <div class="mb-5">
+        <h4 class="mb-3">Kullanıcılar</h4>
+        <table class="table table-bordered table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Ad</th>
+                    <th>Soyad</th>
+                    <th>Birim</th>
+                    <th>İşlemler</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var k in Model.Kullanicilar)
+                {
+                    <tr>
+                        <td>@k.Ad</td>
+                        <td>@k.Soyad</td>
+                        <td>@(k.Birim?.Ad ?? "—")</td>
+                        <td>
+                            <a href="@Url.Action("KullaniciyiAdminYap", new { id = k.Id })" class="btn btn-success btn-sm me-2">
+                                <i class="bi bi-person-check"></i> Admin Yap
+                            </a>
+                            <a href="@Url.Action("KullaniciSil", new { id = k.Id })" class="btn btn-danger btn-sm">
+                                <i class="bi bi-trash"></i> Sil
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 
+    <div>
+        <h4 class="mb-3">Adminler</h4>
+        <table class="table table-bordered table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Ad</th>
+                    <th>Soyad</th>
+                    <th>İşlem</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var a in Model.Adminler)
+                {
+                    <tr>
+                        <td>@a.Ad</td>
+                        <td>@a.Soyad</td>
+                        <td>
+                            <a href="@Url.Action("AdminiKullaniciYap", new { id = a.Id })" class="btn btn-warning btn-sm">
+                                <i class="bi bi-person-dash"></i> Kullanıcı Yap
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>

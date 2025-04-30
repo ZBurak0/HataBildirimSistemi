@@ -5,6 +5,9 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.IO;
+using ClosedXML.Excel;
+
 
 namespace HataBildirimSistemi.Controllers
 {
@@ -72,7 +75,7 @@ namespace HataBildirimSistemi.Controllers
                     TelNo = admin.TelNo,
                     KKullaniciAd = admin.AKullaniciAd,
                     KSifre = admin.ASifre,
-                    BirimId = admin.BirimId
+                    BirimId = (int)admin.BirimId
                 };
 
                 entity.Kullanici.Add(yeniKullanici);
@@ -267,7 +270,7 @@ namespace HataBildirimSistemi.Controllers
         [HttpGet]
         public ActionResult Duzenle(int id)
         {
-            var Admin  = entity.Admin.Find(id);
+            var Admin = entity.Admin.Find(id);
             if (Admin == null)
             {
                 return HttpNotFound();
@@ -281,6 +284,18 @@ namespace HataBildirimSistemi.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (model.ASifre.Length < 6 || model.ASifre.Length > 20)
+                {
+                    ModelState.AddModelError("ASifre", "Şifre 6 ile 20 karakter arasında olmalıdır.");
+                    return View(model);
+                }
+                // Kullanıcı adı kontrolü
+                if (!model.AKullaniciAd.ToLower().EndsWith("@akdeniz.edu.tr"))
+                {
+                    ModelState.AddModelError("KullaniciAdi", "Kullanıcı adı @akdeniz.edu.tr ile bitmelidir.");
+                    return View(model);
+                }
+
                 var Admin = entity.Admin.Find(model.Id);
                 if (Admin != null)
                 {
@@ -288,6 +303,7 @@ namespace HataBildirimSistemi.Controllers
                     Admin.Soyad = model.Soyad;
                     Admin.TelNo = model.TelNo;
                     Admin.ASifre = model.ASifre;
+                    Admin.AKullaniciAd = model.AKullaniciAd;
 
                     entity.SaveChanges();
                     return RedirectToAction("AProfil");
@@ -295,6 +311,54 @@ namespace HataBildirimSistemi.Controllers
             }
 
             return View(model);
+        }
+        // Arıza Bildirim Raporu (Excel İndirme)
+        public ActionResult ArizaRaporuIndir()
+        {
+            var arizalar = entity.ArızaBildirim
+                                 .Select(x => new
+                                 {
+                                     ArizaAdi = x.Ad,
+                                     Tarih = x.Tarih,
+                                     BirimAdi = x.Birim.Ad,
+                                     DurumAdi = x.Durum.Ad,
+                                 })
+                                 .ToList();
+
+            using (var workbook = new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add("Ariza Raporu");
+
+                // Başlıklar
+                worksheet.Cell(1, 1).Value = "Arıza Adı";
+                worksheet.Cell(1, 2).Value = "Tarih";
+                worksheet.Cell(1, 3).Value = "Birim";
+                worksheet.Cell(1, 4).Value = "Durum";
+
+                int row = 2;
+                foreach (var item in arizalar)
+                {
+                    worksheet.Cell(row, 1).Value = item.ArizaAdi;
+                    worksheet.Cell(row, 2).Value = item.Tarih.HasValue ? item.Tarih.Value.ToShortDateString() : "";
+                    worksheet.Cell(row, 3).Value = item.BirimAdi;
+                    worksheet.Cell(row, 4).Value = item.DurumAdi;
+                    row++;
+                }
+
+                using (var stream = new MemoryStream())
+                {
+                    workbook.SaveAs(stream);
+                    stream.Position = 0;
+                    return File(stream.ToArray(),
+                                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                                "ArizaRaporu.xlsx");
+                }
+            }
+
+        }
+        public ActionResult LogOut()
+        {
+            return RedirectToAction("Index", "Login");
         }
     }
 }

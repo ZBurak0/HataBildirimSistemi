@@ -23,7 +23,6 @@ namespace HataBildirimSistemi.Models
         [Required(ErrorMessage = "Soyad alaný zorunludur.")]
         public string Soyad { get; set; }
 
-        [Required(ErrorMessage = "Birim seçilmelidir.")]
         public Nullable<int> BirimId { get; set; }
 
         [Required(ErrorMessage = "Telefon numarasý girilmelidir.")]

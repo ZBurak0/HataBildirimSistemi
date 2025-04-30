@@ -148,22 +148,38 @@ namespace HataBildirimSistemi.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (model.KSifre.Length < 6 || model.KSifre.Length > 20)
+                {
+                    ModelState.AddModelError("KSifre", "Şifre 6 ile 20 karakter arasında olmalıdır.");
+                    return View(model);
+                }
+                // Kullanıcı adı kontrolü
+                if (!model.KKullaniciAd.ToLower().EndsWith("@akdeniz.edu.tr"))
+                {
+                    ModelState.AddModelError("KKullaniciAdi", "Kullanıcı adı @akdeniz.edu.tr ile bitmelidir.");
+                    return View(model);
+                }
+
                 var kullanici = entity.Kullanici.Find(model.Id);
                 if (kullanici != null)
                 {
                     kullanici.Ad = model.Ad;
                     kullanici.Soyad = model.Soyad;
                     kullanici.TelNo = model.TelNo;
+                    kullanici.KKullaniciAd = model.KKullaniciAd;
                     kullanici.KSifre = model.KSifre;
 
                     entity.SaveChanges();
                     return RedirectToAction("Profil");
                 }
-            }
 
+                return HttpNotFound();
+            }
             return View(model);
         }
+        public ActionResult LogOut()
+        {
+            return RedirectToAction("Index", "Login");
+        }
     }
-    //opensource anket uygulaması 
-    //gorselliği kullan 
-    }
+}
