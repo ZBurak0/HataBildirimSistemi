@@ -12,21 +12,20 @@ namespace HataBildirimSistemi.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Birim
+    public partial class AltArizaTur
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Birim()
+        public AltArizaTur()
         {
-            this.ArızaBildirim = new HashSet<ArızaBildirim>();
-            this.Kullanici = new HashSet<Kullanici>();
+            this.ServisArizaTur = new HashSet<ServisArizaTur>();
         }
     
         public int Id { get; set; }
+        public Nullable<int> ArizaTurId { get; set; }
         public string Ad { get; set; }
     
+        public virtual ArızaTur ArızaTur { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ArızaBildirim> ArızaBildirim { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Kullanici> Kullanici { get; set; }
+        public virtual ICollection<ServisArizaTur> ServisArizaTur { get; set; }
     }
 }

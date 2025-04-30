@@ -15,6 +15,12 @@ namespace HataBildirimSistemi.Models
 
     public partial class Admin
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Bina()
+        {
+            this.ArızaBildirim = new HashSet<ArızaBildirim>();
+        }
+    
         public int Id { get; set; }
         public string Ad { get; set; }
         public string Soyad { get; set; }
@@ -23,11 +29,11 @@ namespace HataBildirimSistemi.Models
         public string AKullaniciAd { get; set; }
 
         [Required]
-        [StringLength(20, MinimumLength = 6, ErrorMessage = "�ifre 6 ile 20 karakter aras�nda olmal�d�r.")]
+        [StringLength(20, MinimumLength = 6, ErrorMessage = "Şifre 6 ile 20 karakter arasında olmalıdır.")]
         public string ASifre { get; set; }
         public Nullable<int> YetkiId { get; set; }
     
-        public virtual Birim Birim { get; set; }
-        public virtual Yetki Yetki { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ArızaBildirim> ArızaBildirim { get; set; }
     }
 }

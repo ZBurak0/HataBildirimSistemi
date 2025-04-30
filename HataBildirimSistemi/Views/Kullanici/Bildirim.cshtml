@@ -5,88 +5,143 @@
     Layout = "~/Views/Shared/_LayoutKullanici.cshtml";
 }
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <title>Arıza Bildirimi</title>
+@section Styles {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
     <style>
         body {
-            background: linear-gradient(135deg, #6e8efb, #a777e3);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Archivo', sans-serif;
+            background-color: #f4f6f8;
         }
 
         .form-card {
             background: white;
-            border-radius: 20px;
-            padding: 40px;
+            padding: 50px;
             width: 100%;
-            max-width: 600px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            max-width: 1200px;
+            margin: 0 auto;
+            border-radius: 18px;
         }
 
-        label {
-            font-weight: 500;
+            .form-card .mb-3 {
+                margin-bottom: 2rem !important;
+            }
+
+        .custom-submit-btn {
+            background-color: #008756;
+            color: white;
+            border: none;
+            width: 200px;
+            border-radius: 30px;
+            transition: background-color 0.3s ease;
+        }
+
+            .custom-submit-btn:hover {
+                background-color: #02b574;
+            }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
         }
     </style>
-</head>
-<body>
-    <div class="form-card">
-        <h3 class="mb-4 text-center">🛠️ Arıza Bildirim Formu</h3>
+}
 
-        @using (Html.BeginForm("Bildirim", "Kullanici", FormMethod.Post, new { enctype = "multipart/form-data" }))
+<div class="form-card mt-5">
+    <h3 class="mb-4 text-center">Arıza Bildirim Formu</h3>
+
+    @using (Html.BeginForm("Bildirim", "Kullanici", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="mb-3">
+            <label class="form-label">Arızayı bildirdiğiniz Birim</label>
+            <input type="text" class="form-control" value="@ViewBag.BirimAdi" readonly />
+        </div>
+
+        <div class="mb-3">
+            <label for="ArizaAdi" class="form-label">Arıza Adı</label>
+            <input type="text" class="form-control" id="ArizaAdi" name="ArizaAdi" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="ArizaTuru" class="form-label">Arıza Türü</label>
+            <select class="form-select" id="ArizaTuru" name="ArizaTuru" required>
+                <option selected disabled>-- Tür Seçin --</option>
+                @foreach (var item in ViewBag.Arizalar)
+                {
+                    <option value="@item.Id">@item.Ad</option>
+                }
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="BinaId" class="form-label">Bina Seçiniz</label>
+            <select class="form-select" id="BinaId" name="BinaId" onchange="binaSecimiKontrol()" required>
+                <option selected disabled>-- Bina Seçin --</option>
+                @foreach (var bina in ViewBag.Binalar)
+                {
+                    <option value="@bina.Value">@bina.Text</option>
+                }
+                <option value="Diger">Diğer</option>
+            </select>
+        </div>
+
+        <div class="mb-3" id="digerBinaDiv" style="display:none;">
+            <label for="DigerBinaAdi" class="form-label">Diğer Bina Adı</label>
+            <input type="text" class="form-control" id="DigerBinaAdi" name="DigerBinaAdi" placeholder="Lütfen bina adını giriniz" />
+        </div>
+
+        <div class="mb-3">
+            <label for="Aciklama" class="form-label">Açıklama (en fazla 350 karakter)</label>
+            <textarea class="form-control" id="Aciklama" name="Aciklama" rows="4" maxlength="350" required></textarea>
+            <small class="text-muted">Karakter sınırı: 350</small>
+        </div>
+
+        <div class="mb-3">
+            <label for="Dosya" class="form-label">Dosya Yükle (isteğe bağlı)</label>
+            <input type="file" class="form-control" id="Dosya" name="Dosya" accept=".pdf,.doc,.docx,.png,.jpg" />
+        </div>
+
+        <div class="d-flex justify-content-center">
+            <button type="submit" class="btn custom-submit-btn">Gönder</button>
+        </div>
+
+        if (ViewBag.basari != null)
         {
-            <!-- Arıza Adı -->
-            <div class="mb-3">
-                <label for="ArizaAdi" class="form-label">Arıza Adı</label>
-                <input type="text" class="form-control" id="ArizaAdi" name="ArizaAdi" required />
-            </div>
+            <div class="alert alert-success mt-3">@ViewBag.basari</div>
+        }
 
-            <!-- Arıza Türü -->
-            <div class="mb-3">
-                <label for="ArizaTuru" class="form-label">Arıza Türü</label>
-                <select class="form-select" id="ArizaTuru" name="ArizaTuru" required>
-                    <option selected disabled>-- Tür Seçin --</option>
-                    @foreach (var item in ViewBag.Arizalar)
-                    {
-                        <option value="@item.Id">@item.Ad</option>
-                    }
-                </select>
+        @* ModelState Hataları varsa göster *@
+        if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger mt-3">
+                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <div>@error.ErrorMessage</div>
+                }
             </div>
+        }
+    }
+</div>
 
-            <!-- Açıklama -->
-            <div class="mb-3">
-                <label for="Aciklama" class="form-label">Açıklama (en fazla 350 karakter)</label>
-                <textarea class="form-control" id="Aciklama" name="Aciklama" rows="4" maxlength="350" required></textarea>
-                <small class="text-muted">Karakter sınırı: 350</small>
-            </div>
-
-            <!-- Dosya -->
-            <div class="mb-3">
-                <label for="Dosya" class="form-label">Dosya Yükle</label>
-                <input type="file" class="form-control" id="Dosya" name="Dosya" accept=".pdf,.doc,.docx,.png,.jpg" />
-            </div>
-
-            <!-- Tarih -->
-            <div class="mb-3">
-                <label for="Tarih" class="form-label">Tarih</label>
-                <input type="date" class="form-control" id="Tarih" name="Tarih" required />
-            </div>
-            <!-- Buton -->
-            <div class="d-grid">
-                <button type="submit" class="btn btn-primary">Gönder</button>
-            </div>
-
-            if (ViewBag.basari != null)
-            {
-                <div class="alert alert-success mt-3">@ViewBag.basari</div>
+@section Scripts {
+    <script>
+        function binaSecimiKontrol() {
+            var secim = document.getElementById("BinaId").value;
+            var digerDiv = document.getElementById("digerBinaDiv");
+            if (secim === "Diger") {
+                digerDiv.style.display = "block";
+                document.getElementById("DigerBinaAdi").setAttribute("required", "required");
+            } else {
+                digerDiv.style.display = "none";
+                var digerInput = document.getElementById("DigerBinaAdi");
+                digerInput.value = "";
+                digerInput.removeAttribute("required");
             }
         }
-    </div>
-</body>
-</html>
+
+        window.onload = function () {
+            binaSecimiKontrol();
+        };
+    </script>
+}

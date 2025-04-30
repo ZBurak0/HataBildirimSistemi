@@ -13,6 +13,11 @@
     <!-- Bootstrap CSS & Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link href="~/Content/custom.css" rel="stylesheet" />
+
+    @RenderSection("Styles", required: false)
 
     <style>
         body {
@@ -31,7 +36,7 @@
             font-size: 1.4rem; /* Navbar linklerinin yazı boyutunu artırdık */
             font-weight: 600; /* Navbar linklerini kalınlaştırdık */
             padding: 10px 15px; /* Linklerin etrafına biraz boşluk ekledik */
-        }
+            }
 
             .nav-link:hover {
                 background-color: #B8D5FF; /* Hover durumunda pastel mavi arka plan ekledik */
@@ -39,30 +44,30 @@
 
         main {
             font-size: 1.2rem; /* Sayfa içeriği yazı boyutunu büyüttük */
-        }
+            }
 
         table th, table td {
             font-size: 1.2rem; /* Tablo başlıkları ve hücre yazı boyutlarını artırdık */
             padding: 20px; /* Hücrelerin içine daha fazla boşluk ekledik */
-        }
+                }
 
         table {
             width: 100%;
             margin-top: 30px; /* Tabloya daha fazla boşluk ekledik */
-        }
+                }
 
         /* Başlıkların boyutlarını artırdık */
         h2, h3 {
             font-size: 2.5rem; /* Başlık yazı boyutunu 2 katına çıkardık */
             font-weight: 700; /* Yazı tipini kalın yaptık */
-        }
+            }
 
         /* Arızalar başlığını daha belirgin hale getirdik */
         .arizalar-header {
             font-size: 3rem; /* Arızalar başlığını büyüttük */
             font-weight: 800; /* Daha kalın yaptık */
             margin-bottom: 30px; /* Arızalar başlığı ile içerik arasında boşluk */
-        }
+            }
 
         /* Navbar butonlarını büyütme ve kalınlaştırma */
         .navbar-nav .nav-item .nav-link {
@@ -72,6 +77,7 @@
         }
     </style>
 </head>
+
 <body>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #A9C8FF;">
@@ -104,10 +110,12 @@
     <!-- Sayfa içeriği -->
     <main class="container mt-4">
         <h2 class="arizalar-header">Arızalar</h2> <!-- Arızalar başlığını daha belirgin hale getirdik -->
-        @RenderBody()
+                @RenderBody()
     </main>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    @RenderSection("Scripts", required: false)
 </body>
 </html>

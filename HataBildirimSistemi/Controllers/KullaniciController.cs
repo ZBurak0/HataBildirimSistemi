@@ -17,74 +17,115 @@ namespace HataBildirimSistemi.Controllers
         // GET: Kullanici
         public ActionResult Bildirim()
         {
-            var Arizalar = (from p in entity.ArızaTur select p).ToList();
+            var Arizalar = entity.ArızaTur.ToList();
+            var Binalar = entity.Bina.ToList();
+
             ViewBag.Arizalar = Arizalar;
+            ViewBag.Binalar = new SelectList(Binalar, "Id", "Ad");
+
+            int BirimId = Convert.ToInt32(Session["KBirimId"]);
+            var birim = entity.Birim.Find(BirimId);
+            ViewBag.BirimAdi = birim != null ? birim.Ad : "Birim bulunamadı";
 
             return View();
         }
+
         [HttpPost]
         public ActionResult Bildirim(FormCollection formCollection, HttpPostedFileBase Dosya)
         {
-            var Arizalar = (from p in entity.ArızaTur select p).ToList();
-            var Durumlar = (from p in entity.Durum select p).ToList();
+            var Arizalar = entity.ArızaTur.ToList();
+            var Binalar = entity.Bina.ToList();
+
             ViewBag.Arizalar = Arizalar;
-            ViewBag.Durum = Durumlar;//viewde combobox ayarlamada kaldı
+            ViewBag.Binalar = new SelectList(Binalar, "Id", "Ad");
 
             int BirimId = Convert.ToInt32(Session["KBirimId"]);
-            string Ad = (string)Session["Ad"];
-            //formdan alınanlar 
+            var birim = entity.Birim.Find(BirimId);
+            ViewBag.BirimAdi = birim != null ? birim.Ad : "Birim bulunamadı";
+
+            string Ad = (string)Session["KUAd"];
+
             string ArizaAdi = formCollection["ArizaAdi"];
             int ArizaTurId = Convert.ToInt32(formCollection["ArizaTuru"]);
             string Aciklama = formCollection["Aciklama"];
-            DateTime? tarih = null;
-            if (DateTime.TryParse(formCollection["Tarih"], out DateTime parsed))
+
+            string binaSecim = formCollection["BinaId"];
+            string digerBinaAdi = formCollection["DigerBinaAdi"];
+
+            int binaId;
+
+            if (binaSecim == "Diger")
             {
-                tarih = parsed;
+                if (!string.IsNullOrWhiteSpace(digerBinaAdi))
+                {
+                    Bina yeniBina = new Bina { Ad = digerBinaAdi };
+                    entity.Bina.Add(yeniBina);
+                    entity.SaveChanges();
+
+                    binaId = yeniBina.Id;
+                }
+                else
+                {
+                    ModelState.AddModelError("DigerBinaAdi", "Lütfen bina adını giriniz.");
+                    return View();
+                }
             }
+            else
+            {
+                binaId = Convert.ToInt32(binaSecim);
+            }
+
             ArızaBildirim arzb = new ArızaBildirim();
 
+            if (Dosya != null && Dosya.ContentLength > 0)
+            {
+                var dosyaAdi = Path.GetFileName(Dosya.FileName);
+                var klasor = Server.MapPath("~/Uploads/");
+                var yol = Path.Combine(klasor, dosyaAdi);
 
-            //dosya yolu gelecek
+                if (!Directory.Exists(klasor))
+                    Directory.CreateDirectory(klasor);
 
-            // Dosya adını almak
-            var dosyaAdi = Path.GetFileName(Dosya.FileName);
-
-            // Dosyanın kaydedileceği yol
-            var yol = Path.Combine(Server.MapPath("~/Uploads/"), dosyaAdi);
-            var klasor = Server.MapPath("~/Uploads/");
-            if (!Directory.Exists(klasor))
-                Directory.CreateDirectory(klasor);
-            // Dosyayı kaydetmek
-            Dosya.SaveAs(yol);
-
-            // Dosya yolunu modelde tutmak
-            arzb.DosyaYolu = "/Uploads/" + dosyaAdi;
+                Dosya.SaveAs(yol);
+                arzb.DosyaYolu = "/Uploads/" + dosyaAdi;
+            }
+            else
+            {
+                arzb.DosyaYolu = null;
+            }
 
             arzb.Ad = ArizaAdi;
             arzb.KullaniciAd = Ad;
             arzb.BirimId = BirimId;
             arzb.ArizaTurId = ArizaTurId;
             arzb.Aciklama = Aciklama;
-            arzb.Tarih = tarih;
+            arzb.Tarih = DateTime.Now;
+            arzb.DurumId = 5;
+            arzb.BinaId = binaId;
 
             entity.ArızaBildirim.Add(arzb);
             entity.SaveChanges();
+
             ViewBag.basari = "Kaydetme başarılı";
+
             return View();
         }
 
 
-        [HttpGet]
+
         public ActionResult Listeleme()
         {
-            var KAd = Session["KAd"];
+            var KAd = Session["KUAd"];
             ViewBag.Birimler = new SelectList(entity.Birim.ToList(), "Id", "Ad");
             ViewBag.Arizalar = new SelectList(entity.ArızaTur.ToList(), "Id", "Ad");
+            ViewBag.Durumlar = new SelectList(entity.Durum.ToList(), "Id", "Ad");
+            ViewBag.Binalar = new SelectList(entity.Bina.ToList(), "Id", "Ad"); // Bina listesi
 
             var arizalarr = entity.ArızaBildirim
                 .Include(a => a.Birim)
                 .Include(a => a.ArızaTur)
                 .Include(a => a.Durum)
+                .Include(a => a.Bina) // Bina dahil edildi
                 .Where(a => a.KullaniciAd == KAd)
                 .ToList();
 
@@ -92,13 +133,14 @@ namespace HataBildirimSistemi.Controllers
         }
 
         [HttpPost]
-        public ActionResult Listeleme(int? BirimId, int? ArizaTurId)
+        public ActionResult Listeleme(int? BirimId, int? ArizaTurId, int? DurumId, int? BinaId)  // BinaId eklendi
         {
-            var KAd = Session["KAd"];
+            var KAd = Session["KUAd"];
             var arizalarr = entity.ArızaBildirim
                 .Include(a => a.Birim)
                 .Include(a => a.ArızaTur)
                 .Include(a => a.Durum)
+                .Include(a => a.Bina) // Bina dahil edildi
                 .Where(a => a.KullaniciAd == KAd)
                 .AsQueryable();
 
@@ -112,11 +154,25 @@ namespace HataBildirimSistemi.Controllers
                 arizalarr = arizalarr.Where(a => a.ArizaTurId == ArizaTurId);
             }
 
+            if (DurumId.HasValue)
+            {
+                arizalarr = arizalarr.Where(a => a.DurumId == DurumId);
+            }
+
+            if (BinaId.HasValue)  // Bina filtreleme eklendi
+            {
+                arizalarr = arizalarr.Where(a => a.BinaId == BinaId);
+            }
+
             ViewBag.Birimler = new SelectList(entity.Birim.ToList(), "Id", "Ad", BirimId);
             ViewBag.Arizalar = new SelectList(entity.ArızaTur.ToList(), "Id", "Ad", ArizaTurId);
+            ViewBag.Durumlar = new SelectList(entity.Durum.ToList(), "Id", "Ad", DurumId);
+            ViewBag.Binalar = new SelectList(entity.Bina.ToList(), "Id", "Ad", BinaId);  // Bina dropdown
 
             return View(arizalarr.ToList());
         }
+
+
         public ActionResult Profil()
         {
             int? kullaniciId = Session["KId"] as int?;
@@ -139,6 +195,10 @@ namespace HataBildirimSistemi.Controllers
             {
                 return HttpNotFound();
             }
+
+            // Birim listesini ViewBag ile View'a gönder
+            ViewBag.Birimler = new SelectList(entity.Birim.ToList(), "Id", "Ad", kullanici.BirimId);
+
             return View(kullanici);
         }
 

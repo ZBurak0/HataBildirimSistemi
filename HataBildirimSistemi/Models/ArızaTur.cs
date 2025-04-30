@@ -17,16 +17,22 @@ namespace HataBildirimSistemi.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ArızaTur()
         {
+            this.AltArizaTur = new HashSet<AltArizaTur>();
             this.ArızaBildirim = new HashSet<ArızaBildirim>();
-            this.YetkiliServis = new HashSet<YetkiliServis>();
+            this.Kullanici = new HashSet<Kullanici>();
+            this.ServisArizaTur = new HashSet<ServisArizaTur>();
         }
     
         public int Id { get; set; }
         public string Ad { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<AltArizaTur> AltArizaTur { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ArızaBildirim> ArızaBildirim { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<YetkiliServis> YetkiliServis { get; set; }
+        public virtual ICollection<Kullanici> Kullanici { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ServisArizaTur> ServisArizaTur { get; set; }
     }
 }

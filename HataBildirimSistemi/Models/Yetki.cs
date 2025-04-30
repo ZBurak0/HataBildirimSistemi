@@ -17,19 +17,13 @@ namespace HataBildirimSistemi.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Yetki()
         {
-            this.Admin = new HashSet<Admin>();
             this.Kullanici = new HashSet<Kullanici>();
-            this.YetkiliServis = new HashSet<YetkiliServis>();
         }
     
         public int Id { get; set; }
         public string Ad { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Admin> Admin { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Kullanici> Kullanici { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<YetkiliServis> YetkiliServis { get; set; }
     }
 }
