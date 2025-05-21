@@ -5,91 +5,6 @@
     Layout = "~/Views/Shared/_LayoutKullanici.cshtml";
 }
 
-@section Styles {
-    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Archivo', sans-serif;
-            background-color: #F9F9F9;
-            padding: 40px;
-        }
-
-        .form-title {
-            font-size: 28px;
-            color: #1A2A47;
-            margin-bottom: 20px;
-            font-weight: 600;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-label {
-            font-size: 16px;
-            color: #1A2A47;
-            margin-bottom: 8px;
-            display: block;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 12px;
-            font-size: 16px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            background-color: #FFF;
-            box-sizing: border-box;
-        }
-
-            .form-control:focus {
-                border-color: #2C3E50;
-                outline: none;
-            }
-
-        .form-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 15px;
-        }
-
-        .btn {
-            padding: 10px 20px;
-            font-size: 16px;
-            border-radius: 8px;
-            text-decoration: none;
-        }
-
-        .btn-primary {
-            background-color: #008756;
-            color: white;
-            border: none;
-            border-radius: 25px;
-        }
-
-            .btn-primary:hover {
-                background-color: #02b574;
-            }
-
-        .btn-secondary {
-            background-color: #d6655c;
-            color: white;
-            border: none;
-            border-radius: 25px;
-        }
-
-            .btn-secondary:hover {
-                background-color: #f07f75;
-            }
-
-        .text-danger {
-            color: #d9534f;
-            font-size: 14px;
-        }
-    </style>
-}
-
-
 <h2>Profil Bilgilerini Düzenle</h2>
 
 @using (Html.BeginForm())
@@ -101,19 +16,19 @@
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
     <div class="form-group">
-        @Html.LabelFor(m => m.Ad, "Ad")
+        @Html.LabelFor(m => m.Ad)
         @Html.TextBoxFor(m => m.Ad, new { @class = "form-control" })
         @Html.ValidationMessageFor(m => m.Ad, "", new { @class = "text-danger" })
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(m => m.Soyad, "Soyad")
+        @Html.LabelFor(m => m.Soyad)
         @Html.TextBoxFor(m => m.Soyad, new { @class = "form-control" })
         @Html.ValidationMessageFor(m => m.Soyad, "", new { @class = "text-danger" })
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(m => m.TelNo, "Telefon Numarası")
+        @Html.LabelFor(m => m.TelNo)
         @Html.TextBoxFor(m => m.TelNo, new { @class = "form-control" })
         @Html.ValidationMessageFor(m => m.TelNo, "", new { @class = "text-danger" })
     </div>
@@ -129,7 +44,6 @@
         @Html.PasswordFor(m => m.KSifre, new { @class = "form-control" })
         @Html.ValidationMessageFor(m => m.KSifre, "", new { @class = "text-danger" })
     </div>
-
 
     <button type="submit" class="btn btn-primary">Kaydet</button>
     <a href="@Url.Action("Profil", "Kullanici")" class="btn btn-secondary">İptal</a>

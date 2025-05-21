@@ -4,113 +4,34 @@
     Layout = "~/Views/Shared/_LayoutKullanici.cshtml";
 }
 
-@section Styles {
-    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
-    <style>
-        body {
-            font-family: 'Archivo', sans-serif;
-            background-color: #F9F9F9;
-        }
-
-        .table th, .table td {
-            text-align: center;
-            vertical-align: middle;
-        }
-
-        .table {
-            background-color: #ffffff;
-            border-radius: 10px;
-        }
-
-            .table th {
-                background-color: #2C3E50;
-                color: white;
-            }
-
-        .table-hover tbody tr:hover {
-            background-color: #96ADD6;
-        }
-
-        .btn-filter {
-            background-color: #fca7a7;
-            color: white;
-            border: none;
-            border-radius: 30px;
-            transition: background-color 0.3s ease;
-            padding: 10px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-        }
-
-            .btn-filter i {
-                margin-right: 10px;
-            }
-
-            .btn-filter:hover {
-                background-color: #1f6e66;
-            }
-
-        .form-label {
-            font-weight: 500;
-        }
-
-        .form-select {
-            border-radius: 20px;
-            border: 1px solid #2A3C4F;
-        }
-
-        .table-responsive {
-            margin-top: 30px;
-        }
-
-        h2 {
-            color: #1A2A47;
-        }
-    </style>
-}
-
 <div class="container mt-5">
-    <h2 class="mb-4">Arıza Görüntüleme</h2>
+    <h2 class="mb-4 text-primary">Arıza Görüntüleme</h2>
 
     @using (Html.BeginForm("Listeleme", "Kullanici", FormMethod.Post))
     {
-        <div class="row mb-4 align-items-end">
-            <div class="col-md-3">
-                <label for="ArizaTurId" class="form-label">Arıza Türü</label>
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <label class="form-label">Arıza Türü Seç</label>
                 @Html.DropDownList("ArizaTurId", (SelectList)ViewBag.Arizalar, "Arıza Türü Seçin", new { @class = "form-select" })
             </div>
-            <div class="col-md-3">
-                <label for="BirimId" class="form-label">Birim</label>
+            <div class="col-md-4">
+                <label class="form-label">Birim Seç</label>
                 @Html.DropDownList("BirimId", (SelectList)ViewBag.Birimler, "Birim Seçin", new { @class = "form-select" })
             </div>
-            <div class="col-md-3">
-                <label for="DurumId" class="form-label">Durum</label>
-                @Html.DropDownList("DurumId", (SelectList)ViewBag.Durumlar, "Durum Seçin", new { @class = "form-select" })
-            </div>
-            <div class="col-md-3">
-                <label for="BinaId" class="form-label">Bina</label>
-                @Html.DropDownList("BinaId", (SelectList)ViewBag.Binalar, "Bina Seçin", new { @class = "form-select" })
-            </div>
-            <div class="col-md-12 mt-3">
-                <button type="submit" class="btn btn-filter">
-                    <i class="fas fa-sliders-h"></i> Filtrele
-                </button>
+            <div class="col-md-4 d-flex align-items-end">
+                <button type="submit" class="btn btn-outline-primary w-100">Filtrele</button>
             </div>
         </div>
     }
 
     <div class="table-responsive">
-        <table class="table table-hover table-bordered">
-            <thead>
+        <table class="table table-hover table-bordered align-middle">
+            <thead class="table-dark text-center">
                 <tr>
                     <th>Arıza ID</th>
                     <th>Ad</th>
                     <th>Tür</th>
                     <th>Birim</th>
-                    <th>Bina</th> <!-- Yeni sütun eklendi -->
                     <th>Açıklama</th>
                     <th>Dosya</th>
                     <th>Tarih</th>
@@ -123,11 +44,10 @@
                     foreach (var item in Model)
                     {
                         <tr>
-                            <td>@item.Id</td>
+                            <td class="text-center">@item.Id</td>
                             <td>@item.Ad</td>
                             <td>@item.ArızaTur.Ad</td>
                             <td>@item.Birim.Ad</td>
-                            <td>@(item.Bina != null ? item.Bina.Ad : "—")</td> <!-- Bina bilgisi -->
                             <td>@item.Aciklama</td>
                             <td>
                                 @if (!string.IsNullOrEmpty(item.DosyaYolu))
@@ -139,7 +59,7 @@
                                     <span class="text-muted">Dosya yok</span>
                                 }
                             </td>
-                            <td>@item.Tarih.ToString("dd.MM.yyyy")</td>
+                            <td>@item.Tarih</td>
                             <td>@item.Durum.Ad</td>
                         </tr>
                     }
@@ -147,7 +67,7 @@
                 else
                 {
                     <tr>
-                        <td colspan="9" class="text-center text-danger">Kayıt bulunamadı.</td>
+                        <td colspan="7" class="text-center text-danger">Kayıt bulunamadı.</td>
                     </tr>
                 }
             </tbody>

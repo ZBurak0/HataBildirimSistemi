@@ -26,15 +26,14 @@ namespace HataBildirimSistemi.Models
         }
     
         public virtual DbSet<C__EFMigrationsHistory> C__EFMigrationsHistory { get; set; }
-        public virtual DbSet<AltArizaTur> AltArizaTur { get; set; }
+        public virtual DbSet<Admin> Admin { get; set; }
         public virtual DbSet<ArızaBildirim> ArızaBildirim { get; set; }
         public virtual DbSet<ArızaTur> ArızaTur { get; set; }
-        public virtual DbSet<Bina> Bina { get; set; }
         public virtual DbSet<Birim> Birim { get; set; }
         public virtual DbSet<Durum> Durum { get; set; }
         public virtual DbSet<Kullanici> Kullanici { get; set; }
-        public virtual DbSet<ServisArizaTur> ServisArizaTur { get; set; }
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<Yetki> Yetki { get; set; }
+        public virtual DbSet<YetkiliServis> YetkiliServis { get; set; }
     }
 }

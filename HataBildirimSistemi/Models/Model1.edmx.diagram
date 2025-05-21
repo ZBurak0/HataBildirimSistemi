@@ -4,30 +4,26 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="5b214645fba64166abb8aa73d6a0b777" Name="Diagram1">
+      <Diagram DiagramId="448c323f3fd64606b8e6e344ad6d13b6" Name="Diagram1">
         <EntityTypeShape EntityType="HataBildirimModelMvcModel.C__EFMigrationsHistory" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="HataBildirimModelMvcModel.AltArizaTur" Width="1.5" PointX="3" PointY="6.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="HataBildirimModelMvcModel.ArızaBildirim" Width="1.5" PointX="3" PointY="1.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="HataBildirimModelMvcModel.ArızaTur" Width="1.5" PointX="0.75" PointY="6.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="HataBildirimModelMvcModel.Bina" Width="1.5" PointX="0.75" PointY="3.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="HataBildirimModelMvcModel.Birim" Width="1.5" PointX="0.75" PointY="10.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="HataBildirimModelMvcModel.Durum" Width="1.5" PointX="0.75" PointY="12.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="HataBildirimModelMvcModel.Kullanici" Width="1.5" PointX="3" PointY="9.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="HataBildirimModelMvcModel.ServisArizaTur" Width="1.5" PointX="5.25" PointY="6.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="HataBildirimModelMvcModel.Admin" Width="1.5" PointX="3" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="HataBildirimModelMvcModel.ArızaBildirim" Width="1.5" PointX="9" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="HataBildirimModelMvcModel.ArızaTur" Width="1.5" PointX="0.75" PointY="1.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="HataBildirimModelMvcModel.Birim" Width="1.5" PointX="3.75" PointY="9.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="HataBildirimModelMvcModel.Durum" Width="1.5" PointX="6.75" PointY="8.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="HataBildirimModelMvcModel.Kullanici" Width="1.5" PointX="6" PointY="5.125" IsExpanded="true" />
         <EntityTypeShape EntityType="HataBildirimModelMvcModel.sysdiagrams" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="HataBildirimModelMvcModel.Yetki" Width="1.5" PointX="0.75" PointY="15.75" IsExpanded="true" />
-        <AssociationConnector Association="HataBildirimModelMvcModel.FK_AltArizaTur_ArızaTur" ManuallyRouted="false" />
-        <AssociationConnector Association="HataBildirimModelMvcModel.FK_ServisArizaTur_AltArizaTur" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="HataBildirimModelMvcModel.Yetki" Width="1.5" PointX="0.75" PointY="5.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="HataBildirimModelMvcModel.YetkiliServis" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <AssociationConnector Association="HataBildirimModelMvcModel.FK_Admin_Birim" ManuallyRouted="false" />
+        <AssociationConnector Association="HataBildirimModelMvcModel.FK_Admin_Yetki" ManuallyRouted="false" />
         <AssociationConnector Association="HataBildirimModelMvcModel.FK_ArızaBildirim_ArızaTur" ManuallyRouted="false" />
-        <AssociationConnector Association="HataBildirimModelMvcModel.FK_ArızaBildirim_Bina" ManuallyRouted="false" />
         <AssociationConnector Association="HataBildirimModelMvcModel.FK_ArızaBildirim_Birim" ManuallyRouted="false" />
         <AssociationConnector Association="HataBildirimModelMvcModel.FK_ArızaBildirim_Durum" ManuallyRouted="false" />
-        <AssociationConnector Association="HataBildirimModelMvcModel.FK_ArızaBildirim_Kullanici" ManuallyRouted="false" />
-        <AssociationConnector Association="HataBildirimModelMvcModel.FK_Kullanici_ArızaTur" ManuallyRouted="false" />
-        <AssociationConnector Association="HataBildirimModelMvcModel.FK_ServisArizaTur_ArızaTur" ManuallyRouted="false" />
+        <AssociationConnector Association="HataBildirimModelMvcModel.FK_YetkiliServis_ArızaTur" ManuallyRouted="false" />
         <AssociationConnector Association="HataBildirimModelMvcModel.FK_Kullanici_Birim" ManuallyRouted="false" />
         <AssociationConnector Association="HataBildirimModelMvcModel.FK_Kullanici_Yetki" ManuallyRouted="false" />
-        <AssociationConnector Association="HataBildirimModelMvcModel.FK_ServisArizaTur_Kullanici" ManuallyRouted="false" />
+        <AssociationConnector Association="HataBildirimModelMvcModel.FK_YetkiliServis_Yetki" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

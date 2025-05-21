@@ -2,53 +2,6 @@
 @{
     ViewBag.Title = "Duzenle";
     Layout = "~/Views/Shared/_LayoutBirimAdmin.cshtml";
-        }
-
-            .form-control:focus {
-                border-color: #2C3E50;
-                outline: none;
-            }
-
-        .form-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 15px;
-        }
-
-        .btn {
-            padding: 10px 20px;
-            font-size: 16px;
-            border-radius: 8px;
-            text-decoration: none;
-        }
-
-        .btn-primary {
-            background-color: #008756;
-            color: white;
-            border: none;
-            border-radius: 25px;
-        }
-
-            .btn-primary:hover {
-                background-color: #02b574;
-            }
-
-        .btn-secondary {
-            background-color: #d6655c;
-            color: white;
-            border: none;
-            border-radius: 25px;
-        }
-
-            .btn-secondary:hover {
-                background-color: #f07f75;
-            }
-
-        .text-danger {
-            color: #d9534f;
-            font-size: 14px;
-        }
-    </style>
 }
 
 <h2>Profil Bilgilerini Düzenle</h2>
@@ -57,9 +10,6 @@
 {
     @Html.AntiForgeryToken()
     @Html.HiddenFor(m => m.Id)
-
-    <!-- Genel validation hataları -->
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
     <div class="form-group">
         @Html.LabelFor(m => m.Ad)

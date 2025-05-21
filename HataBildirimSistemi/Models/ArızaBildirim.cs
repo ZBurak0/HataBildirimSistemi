@@ -16,22 +16,16 @@ namespace HataBildirimSistemi.Models
     {
         public int Id { get; set; }
         public string Ad { get; set; }
-        public int ArizaTurId { get; set; }
+        public Nullable<int> ArizaTurId { get; set; }
         public string KullaniciAd { get; set; }
-        public int BirimId { get; set; }
+        public Nullable<int> BirimId { get; set; }
         public string Aciklama { get; set; }
-        public System.DateTime Tarih { get; set; }
+        public Nullable<System.DateTime> Tarih { get; set; }
         public string DosyaYolu { get; set; }
-        public int DurumId { get; set; }
-        public Nullable<int> BinaId { get; set; }
-        public Nullable<bool> Oncelik { get; set; }
-        public Nullable<byte> SıraNo { get; set; }
-        public Nullable<int> KullaniciId { get; set; }
+        public Nullable<int> DurumId { get; set; }
     
         public virtual ArızaTur ArızaTur { get; set; }
-        public virtual Bina Bina { get; set; }
         public virtual Birim Birim { get; set; }
         public virtual Durum Durum { get; set; }
-        public virtual Kullanici Kullanici { get; set; }
     }
 }
