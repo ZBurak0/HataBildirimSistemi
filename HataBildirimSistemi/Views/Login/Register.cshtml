@@ -6,109 +6,241 @@
 }
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
 <style>
     body {
-        background: linear-gradient(135deg, #4e54c8, #8f94fb);
+        background-color: #f2f7fc;
         height: 100vh;
         display: flex;
         justify-content: center;
         align-items: center;
-        font-family: 'Segoe UI', sans-serif;
+        font-family: 'Archivo', sans-serif;
         margin: 0;
     }
 
     .register-card {
-        background: white;
+        background: #ffffff;
         border-radius: 20px;
         padding: 40px;
         width: 100%;
-        max-width: 550px;
-        min-height: 500px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-        animation: fadeIn 0.5s ease-in-out;
+        max-width: 450px;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        text-align: center;
     }
 
     .register-title {
-        font-weight: 700;
-        color: #333;
+        font-weight: 600;
+        color: #003d4d;
         margin-bottom: 30px;
-        text-align: center;
-        font-size: 1.8rem;
-    }
-
-    .form-control {
-        border-radius: 12px;
-        height: 48px;
-        font-size: 1rem;
+        font-size: 32px;
     }
 
     .form-group {
+        position: relative;
         margin-bottom: 20px;
+        text-align: left;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: 600;
+        color: #003d4d;
+    }
+
+    .input-with-icon {
+        position: relative;
+    }
+
+    .form-control {
+        padding-left: 45px;
+        border-radius: 25px;
+        height: 50px;
+        font-size: 1rem;
+        border: 1px solid #ccc;
+        color: #003d4d;
+        background-color: #f9f9f9;
+        transition: all 0.3s ease-in-out;
+        width: 100%;
+    }
+
+        .form-control:focus {
+            border-color: #00C0C0;
+            box-shadow: 0 0 0 0.2rem rgba(0, 174, 239, 0.25);
+            outline: none;
+        }
+
+        .form-control::placeholder {
+            color: #888;
+        }
+
+    .input-icon {
+        position: absolute;
+        top: 50%;
+        left: 15px;
+        transform: translateY(-50%);
+        font-size: 1.2rem;
+        color: #00C2C7;
+        pointer-events: none;
+        z-index: 10;
     }
 
     .btn-register {
-        background: #4e54c8;
+        background-color: #00C0C0;
         color: white;
         border: none;
-        border-radius: 12px;
+        border-radius: 25px;
         padding: 12px;
-        font-weight: 500;
-        font-size: 1.1rem;
+        font-weight: 600;
+        font-size: 1rem;
         width: 100%;
-        transition: all 0.3s ease-in-out;
+        transition: 0.3s ease;
+        margin-top: 10px;
     }
 
         .btn-register:hover {
-            background: #3b3fc0;
+            background-color: #009d9b;
         }
+
+    .validation-error {
+        color: #d9534f;
+        margin-top: 6px;
+        font-size: 0.9rem;
+    }
+
+    /* Dropdown için özel stil */
+    select.form-control {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2300C2C7' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 15px center;
+        background-size: 15px;
+    }
+
+    /* Hatalı alanlar için stil */
+    .is-invalid {
+        border-color: #d9534f !important;
+    }
 </style>
 
 <div class="register-card">
     <h2 class="register-title">Kayıt Ol</h2>
 
-    @using (Html.BeginForm("Register", "Login", FormMethod.Post))
+    @using (Html.BeginForm("Register", "Login", FormMethod.Post, new { id = "registerForm" }))
     {
         @Html.AntiForgeryToken()
 
         <div class="form-group">
             @Html.LabelFor(model => model.Ad)
-            @Html.TextBoxFor(model => model.Ad, new { @class = "form-control", placeholder = "Ad" })
-            @Html.ValidationMessageFor(model => model.Ad)
+            <div class="input-with-icon">
+                <i class="fas fa-user input-icon"></i>
+                @Html.TextBoxFor(model => model.Ad, new { @class = "form-control" + (ViewData.ModelState["Ad"]?.Errors.Count > 0 ? " is-invalid" : ""), placeholder = "Ad", required = "required", id = "Ad" })
+            </div>
+            @Html.ValidationMessageFor(model => model.Ad, null, new { @class = "validation-error" })
+            <span class="validation-error d-none" id="adError">Ad alanı zorunludur</span>
         </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.Soyad)
-            @Html.TextBoxFor(model => model.Soyad, new { @class = "form-control", placeholder = "Soyad" })
-            @Html.ValidationMessageFor(model => model.Soyad)
+            <div class="input-with-icon">
+                <i class="fas fa-user input-icon"></i>
+                @Html.TextBoxFor(model => model.Soyad, new { @class = "form-control" + (ViewData.ModelState["Soyad"]?.Errors.Count > 0 ? " is-invalid" : ""), placeholder = "Soyad", required = "required", id = "Soyad" })
+            </div>
+            @Html.ValidationMessageFor(model => model.Soyad, null, new { @class = "validation-error" })
+            <span class="validation-error d-none" id="soyadError">Soyad alanı zorunludur</span>
         </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.TelNo)
-            @Html.TextBoxFor(model => model.TelNo, new { @class = "form-control", placeholder = "Telefon Numarası" })
-            @Html.ValidationMessageFor(model => model.TelNo)
+            <div class="input-with-icon">
+                <i class="fas fa-phone input-icon"></i>
+                @Html.TextBoxFor(model => model.TelNo, new { @class = "form-control" + (ViewData.ModelState["TelNo"]?.Errors.Count > 0 ? " is-invalid" : ""), placeholder = "Telefon Numarası", required = "required", id = "TelNo" })
+            </div>
+            @Html.ValidationMessageFor(model => model.TelNo, null, new { @class = "validation-error" })
+            <span class="validation-error d-none" id="telNoError">Telefon numarası zorunludur</span>
         </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.KKullaniciAd)
-            @Html.TextBoxFor(model => model.KKullaniciAd, new { @class = "form-control", placeholder = "Kullanıcı Adı (e-posta)" })
-            @Html.ValidationMessageFor(model => model.KKullaniciAd)
+            <div class="input-with-icon">
+                <i class="fas fa-envelope input-icon"></i>
+                @Html.TextBoxFor(model => model.KKullaniciAd, new { @class = "form-control" + (ViewData.ModelState["KKullaniciAd"]?.Errors.Count > 0 ? " is-invalid" : ""), placeholder = "Kullanıcı Adı (e-posta)", required = "required", id = "KKullaniciAd" })
+            </div>
+            @Html.ValidationMessageFor(model => model.KKullaniciAd, null, new { @class = "validation-error" })
+            <span class="validation-error d-none" id="kullaniciAdError">Kullanıcı adı zorunludur</span>
         </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.KSifre)
-            @Html.PasswordFor(model => model.KSifre, new { @class = "form-control", placeholder = "Şifre" })
-            @Html.ValidationMessageFor(model => model.KSifre)
+            <div class="input-with-icon">
+                <i class="fas fa-lock input-icon"></i>
+                @Html.PasswordFor(model => model.KSifre, new { @class = "form-control" + (ViewData.ModelState["KSifre"]?.Errors.Count > 0 ? " is-invalid" : ""), placeholder = "Şifre", required = "required", id = "KSifre" })
+            </div>
+            @Html.ValidationMessageFor(model => model.KSifre, null, new { @class = "validation-error" })
+            <span class="validation-error d-none" id="sifreError">Şifre alanı zorunludur</span>
         </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.BirimId)
-            @Html.DropDownListFor(model => model.BirimId, new SelectList(ViewBag.BirimList, "Id", "Ad"), "Birimi Seçin", new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.BirimId)
+            @Html.DropDownListFor(model => model.BirimId,
+                new SelectList(ViewBag.BirimList, "Id", "Ad"),
+                "Birim seçiniz",
+                new
+                {
+                    @class = "form-control" + (ViewData.ModelState["BirimId"]?.Errors.Count > 0 ? " is-invalid" : ""),
+                    required = "required",
+                    id = "BirimId"
+                })
+            @Html.ValidationMessageFor(model => model.BirimId, null, new { @class = "validation-error" })
+            <span class="validation-error d-none" id="birimError">Birim seçimi zorunludur</span>
         </div>
 
         <div class="form-group">
-            <input type="submit" value="Kayıt Ol" class="btn btn-register" />
+            <button type="submit" class="btn btn-register">Kayıt Ol</button>
         </div>
     }
 </div>
+
+<script>
+    document.getElementById('registerForm').addEventListener('submit', function (event) {
+        let isValid = true;
+
+        // Tüm required alanları kontrol et
+        const requiredFields = this.querySelectorAll('[required]');
+        requiredFields.forEach(field => {
+            const errorElement = document.getElementById(field.id + 'Error');
+
+            if (!field.value.trim()) {
+                field.classList.add('is-invalid');
+                if (errorElement) errorElement.classList.remove('d-none');
+                isValid = false;
+            } else {
+                field.classList.remove('is-invalid');
+                if (errorElement) errorElement.classList.add('d-none');
+            }
+        });
+
+        // Özel birim kontrolü
+        const birimSelect = document.getElementById('BirimId');
+        const birimError = document.getElementById('birimError');
+        if (birimSelect.value === "") {
+            birimSelect.classList.add('is-invalid');
+            birimError.classList.remove('d-none');
+            isValid = false;
+        } else {
+            birimSelect.classList.remove('is-invalid');
+            birimError.classList.add('d-none');
+        }
+
+        if (!isValid) {
+            event.preventDefault();
+            // İlk hatalı alana odaklan
+            const firstInvalid = this.querySelector('.is-invalid');
+            if (firstInvalid) firstInvalid.focus();
+        }
+    });
+</script>

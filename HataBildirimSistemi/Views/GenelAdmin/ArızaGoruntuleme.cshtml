@@ -5,29 +5,106 @@
     Layout = "~/Views/Shared/_LayoutGenelAdmin.cshtml";
 }
 
+@section Styles {
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Archivo', sans-serif;
+            background-color: #F9F9F9;
+        }
+
+        .table th, .table td {
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .table {
+            background-color: #ffffff;
+            border-radius: 10px;
+        }
+
+        .table th {
+            background-color: #2C3E50;
+            color: white;
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: #96ADD6;
+        }
+
+        .btn-filter {
+            background-color: #fca7a7;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            transition: background-color 0.3s ease;
+            width: 100%;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+
+        .btn-filter i {
+            margin-right: 10px;
+        }
+
+        .btn-filter:hover {
+            background-color: #1f6e66;
+        }
+
+        .form-label {
+            font-weight: 500;
+        }
+
+        .form-select, .form-control {
+            border-radius: 20px;
+            border: 1px solid #2A3C4F;
+        }
+
+        .table-responsive {
+            margin-top: 30px;
+        }
+
+        h2 {
+            color: #1A2A47;
+        }
+
+        .filter-row .col {
+            padding-right: 5px;
+            padding-left: 5px;
+        }
+    </style>
+}
+
 <div class="container mt-5">
-    <h2 class="mb-4 text-primary">Arıza Görüntüleme</h2>
+    <h2 class="mb-4">Arıza Görüntüleme</h2>
 
     @using (Html.BeginForm("ArızaGoruntuleme", "GenelAdmin", FormMethod.Post))
     {
-        <div class="row mb-4">
-            <div class="col-md-4">
-                <label class="form-label">Arıza Türü Seç</label>
+        <div class="row mb-4 filter-row align-items-end">
+            <div class="col-md-3">
                 @Html.DropDownList("ArizaTurId", (SelectList)ViewBag.Arizalar, "Arıza Türü Seçin", new { @class = "form-select" })
             </div>
-            <div class="col-md-4">
-                <label class="form-label">Birim Seç</label>
+            <div class="col-md-3">
                 @Html.DropDownList("BirimId", (SelectList)ViewBag.Birimler, "Birim Seçin", new { @class = "form-select" })
             </div>
-            <div class="col-md-4 d-flex align-items-end">
-                <button type="submit" class="btn btn-outline-primary w-100">Filtrele</button>
+            <div class="col-md-4">
+                <input type="text" id="aramaInput" name="ArananKelime" value="@ViewBag.ArananKelime" class="form-control" placeholder="Açıklamada ara..." />
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-filter">
+                    <i class="fas fa-sliders-h"></i> Filtrele
+                </button>
             </div>
         </div>
     }
 
     <div class="table-responsive">
-        <table class="table table-hover table-bordered align-middle">
-            <thead class="table-dark text-center">
+        <table class="table table-hover table-bordered">
+            <thead>
                 <tr>
                     <th>Arıza ID</th>
                     <th>Ad</th>
@@ -39,13 +116,13 @@
                     <th>Durum</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="arizaTableBody">
                 @if (Model != null && Model.Count > 0)
                 {
                     foreach (var item in Model)
                     {
                         <tr>
-                            <td class="text-center">@item.Id</td>
+                            <td>@item.Id</td>
                             <td>@item.Ad</td>
                             <td>@item.ArızaTur.Ad</td>
                             <td>@item.Birim.Ad</td>
@@ -60,18 +137,62 @@
                                     <span class="text-muted">Dosya yok</span>
                                 }
                             </td>
-                            <td>@item.Tarih</td>
-                            <td>@item.Durum.Ad</td>
+                            <td>@item.Tarih.ToString()</td>
+                            <td>@(item.Durum != null ? item.Durum.Ad : "Tanımsız")</td>
                         </tr>
                     }
                 }
                 else
                 {
                     <tr>
-                        <td colspan="7" class="text-center text-danger">Kayıt bulunamadı.</td>
+                        <td colspan="8" class="text-center text-danger">Kayıt bulunamadı.</td>
                     </tr>
                 }
             </tbody>
         </table>
     </div>
 </div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#aramaInput').on('input', function () {
+                var kelime = $(this).val();
+
+                $.ajax({
+                    url: '@Url.Action("ArizaAra", "GenelAdmin")',
+                    type: 'GET',
+                    data: { kelime: kelime },
+                    success: function (data) {
+                        var tbody = $('#arizaTableBody');
+                        tbody.empty();
+
+                        if (data.length === 0) {
+                            tbody.append('<tr><td colspan="8" class="text-center text-danger">Kayıt bulunamadı.</td></tr>');
+                        } else {
+                            $.each(data, function (i, item) {
+                                var dosyaLink = item.DosyaYolu
+                                    ? `<a href="${item.DosyaYolu}" target="_blank" class="btn btn-sm btn-link">Dosyayı Gör</a>`
+                                    : `<span class="text-muted">Dosya yok</span>`;
+
+                                var row = `<tr>
+                                    <td>${item.Id}</td>
+                                    <td>${item.Ad}</td>
+                                    <td>${item.ArizaTur}</td>
+                                    <td>${item.Birim}</td>
+                                    <td>${item.Aciklama}</td>
+                                    <td>${dosyaLink}</td>
+                                    <td>${item.Tarih}</td>
+                                    <td>${item.Durum}</td>
+                                </tr>`;
+
+                                tbody.append(row);
+                            });
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}

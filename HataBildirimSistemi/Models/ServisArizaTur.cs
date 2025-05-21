@@ -12,19 +12,15 @@ namespace HataBildirimSistemi.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class YetkiliServis
+    public partial class ServisArizaTur
     {
         public int Id { get; set; }
-        public string Ad { get; set; }
-        public string Soyad { get; set; }
-        public string TelNo { get; set; }
-        public string Mail { get; set; }
-        public string YKullaniciAd { get; set; }
-        public string YSifre { get; set; }
-        public Nullable<int> YetkiId { get; set; }
-        public Nullable<int> ArizaTurId { get; set; }
+        public int KullaniciId { get; set; }
+        public int ArizaTurId { get; set; }
+        public int AltArizaTurId { get; set; }
     
+        public virtual AltArizaTur AltArizaTur { get; set; }
         public virtual ArızaTur ArızaTur { get; set; }
-        public virtual Yetki Yetki { get; set; }
+        public virtual Kullanici Kullanici { get; set; }
     }
 }
