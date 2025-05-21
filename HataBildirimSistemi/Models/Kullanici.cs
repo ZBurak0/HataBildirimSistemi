@@ -11,34 +11,38 @@ namespace HataBildirimSistemi.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
+    
     public partial class Kullanici
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Kullanici()
+        {
+            this.ArÄ±zaBildirim = new HashSet<ArÄ±zaBildirim>();
+            this.ServisArizaTur = new HashSet<ServisArizaTur>();
+        }
+    
         public int Id { get; set; }
-
-        [Required(ErrorMessage = "Ad alaný zorunludur.")]
         public string Ad { get; set; }
-
-        [Required(ErrorMessage = "Soyad alaný zorunludur.")]
         public string Soyad { get; set; }
 
         public Nullable<int> BirimId { get; set; }
 
-        [Required(ErrorMessage = "Telefon numarasý girilmelidir.")]
-        [StringLength(11, ErrorMessage = "Telefon numarasý en fazla 11 haneli olmalýdýr.")]
-        [RegularExpression(@"^\d{11}$", ErrorMessage = "Telefon numarasý sadece rakamlardan oluþmalý ve 11 haneli olmalýdýr.")]
+        [Required(ErrorMessage = "Telefon numarasÄ± girilmelidir.")]
+        [StringLength(11, ErrorMessage = "Telefon numarasÄ± en fazla 11 haneli olmalÄ±dÄ±r.")]
+        [RegularExpression(@"^\d{11}$", ErrorMessage = "Telefon numarasÄ± sadece rakamlardan oluÅŸmalÄ± ve 11 haneli olmalÄ±dÄ±r.")]
         public string TelNo { get; set; }
-
-        [Required(ErrorMessage = "Kullanýcý adý girilmelidir.")]
-        [RegularExpression(@".+@akdeniz\.edu\.tr$", ErrorMessage = "Kullanýcý adý @akdeniz.edu.tr ile bitmelidir.")]
         public string KKullaniciAd { get; set; }
-
-        [Required(ErrorMessage = "Þifre girilmelidir.")]
-        [StringLength(20, MinimumLength = 6, ErrorMessage = "Þifre 6 ile 20 karakter arasýnda olmalýdýr.")]
         public string KSifre { get; set; }
-        public Nullable<int> YetkiId { get; set; }
+        public int YetkiId { get; set; }
+        public Nullable<int> ArizaTurId { get; set; }
+        public Nullable<int> AltArizaTurId { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ArÄ±zaBildirim> ArÄ±zaBildirim { get; set; }
+        public virtual ArÄ±zaTur ArÄ±zaTur { get; set; }
         public virtual Birim Birim { get; set; }
         public virtual Yetki Yetki { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ServisArizaTur> ServisArizaTur { get; set; }
     }
 }

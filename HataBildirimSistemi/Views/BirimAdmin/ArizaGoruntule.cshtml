@@ -1,8 +1,20 @@
-﻿@{
+﻿@model List<HataBildirimSistemi.Models.ArızaBildirim>
+
+@{
     ViewBag.Title = "ArizaGoruntule";
     Layout = "~/Views/Shared/_LayoutBirimAdmin.cshtml";
 }
 @model List<HataBildirimSistemi.Models.ArızaBildirim>
+
+        .btn-acil {
+            background-color: #e74c3c;
+        }
+
+            .btn-acil:hover {
+                background-color: #b23124;
+            }
+    </style>
+}
 
 <div class="container mt-5">
     <h2 class="mb-4" style="color: #FFB6A4;">Birim Arızaları</h2> <!-- Pastel Turuncu -->
@@ -25,6 +37,23 @@
             <div class="col-md-4 d-flex align-items-end">
                 <button type="submit" class="btn" style="background-color: #A8D8FF; color: #004E89;">Filtrele</button> <!-- Pastel Mavi -->
             </div>
+            <div class="col-md-3">
+                <label class="form-label">Öncelik</label>
+                @Html.DropDownList("Oncelik", new SelectList(new[]{
+                    new SelectListItem{Text="Tümü", Value="" },
+                    new SelectListItem{Text="Normal", Value="false" },
+                    new SelectListItem{Text="Acil", Value="true" }
+                }, "Value", "Text", ViewBag.SelectedOncelik), new { @class = "form-select" })
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Açıklama Ara</label>
+                <input type="text" name="SearchText" value="@ViewBag.SearchText" class="form-control" placeholder="Açıklamada ara..." />
+            </div>
+            <div class="col-md-12 mt-3">
+                <button type="submit" class="btn btn-filter">
+                    <i class="fas fa-filter"></i> Filtrele
+                </button>
+            </div>
         </div>
     }
 
@@ -46,40 +75,48 @@
             </thead>
             <tbody>
                 @foreach (var item in Model)
-                {
+                    {
                     <tr style="transition: background-color 0.3s ease, box-shadow 0.3s ease;" onmouseover="this.style.backgroundColor='#FFFAF2'; this.style.boxShadow='0 0 10px rgba(0, 0, 0, 0.1)'" onmouseout="this.style.backgroundColor=''; this.style.boxShadow='';">
                         <td class="text-center">@item.Id</td>
-                        <td>@item.Ad</td>
-                        <td>@item.ArızaTur.Ad</td>
-                        <td>@item.Birim.Ad</td>
-                        <td>@item.Aciklama</td>
-                        <td>
-                            @if (!string.IsNullOrEmpty(item.DosyaYolu))
-                            {
+                            <td>@item.Ad</td>
+                            <td>@item.ArızaTur.Ad</td>
+                            <td>@item.Birim.Ad</td>
+                            <td>@item.Aciklama</td>
+                            <td>@(item.Bina != null ? item.Bina.Ad : "—")</td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(item.DosyaYolu))
+                                {
                                 <a href="@item.DosyaYolu" target="_blank" class="btn btn-sm btn-link" style="color: #FFB6A4;">Görüntüle</a> <!-- Pastel Turuncu -->
-                            }
-                            else
-                            {
-                                <span class="text-muted">Yok</span>
-                            }
-                        </td>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">Yok</span>
+                                }
+                            </td>
                         <td>@item.Tarih.ToString()</td>
                         <td>
                             @item.Durum.Ad
                         </td>
-                        <td>
-                            @using (Html.BeginForm("DurumDegistir", "BirimAdmin", FormMethod.Post))
-                            {
-                                @Html.AntiForgeryToken()
-                                @Html.Hidden("arizaId", item.Id)
+                            <td>
+                                @using (Html.BeginForm("DurumDegistir", "BirimAdmin", FormMethod.Post))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    @Html.Hidden("arizaId", item.Id)
 
-                                @Html.DropDownList("durumId",
-                                    new SelectList(ViewBag.Durumlar, "Id", "Ad", item.DurumId),
+                                    @Html.DropDownList("durumId",
+                                        new SelectList(ViewBag.Durumlar, "Id", "Ad", item.DurumId),
                                     new { @class = "form-select form-select-sm mb-1" })
 
                                 <button type="submit" class="btn btn-sm" style="background-color: #A8D8FF; color: #004E89;">Güncelle</button> <!-- Pastel Mavi -->
-                            }
-                        </td>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="11" class="text-center text-danger">Gösterilecek arıza bulunamadı.</td>
                     </tr>
                 }
             </tbody>
