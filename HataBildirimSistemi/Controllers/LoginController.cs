@@ -26,10 +26,8 @@ namespace HataBildirimSistemi.Controllers
         [HttpPost]
         public ActionResult Index(string KKullaniciAd, string KSifre)
         {
-
-            // First check if username exists in any of the tables
             var kullanici = entity.Kullanici.FirstOrDefault(p => p.KKullaniciAd == KKullaniciAd);
-            // Check Kullanici table
+
             if (kullanici != null)
             {
                 if (KSifre == kullanici.KSifre)
@@ -41,92 +39,34 @@ namespace HataBildirimSistemi.Controllers
                     Session["KYetkiId"] = kullanici.YetkiId;
                     Session["ArızaTurYet"] = kullanici.ArizaTurId;
 
-                if (kullanici.YetkiId == 2)
-                {
-                    return RedirectToAction("Bildirim", "KUllanici");
-                }
-                if (kullanici.YetkiId == 1)
-                {
-                    return RedirectToAction("ArizaGoruntule", "BirimAdmin");
-                    //switch (kullanici.BirimId)
-                    //{
-                    //    case 1:
-                    //        return RedirectToAction("YArizaGoruntuleme", "YazilimAdmin");
-                    //    case 2:
-                    //        return RedirectToAction("SArizaGoruntuleme", "SistemAdmin");
-                    //    case 3:
-                    //        return RedirectToAction("AArizaGoruntuleme", "AgAdmin");
-                    //}
-                }
-                else
-                {
-                    ViewBag.Mesaj = "Kullanıcı adı veya şifre yanlış.";
-                    return View();
-                }
-            }
-
-            // Check Admin table
-            //if (admin != null)
-            //{
-            //    Session["AId"] = admin.Id;
-            //    Session["AAd"] = admin.Ad;
-
-            //    Session["ABirimId"] = admin.BirimId;
-            //    Session["AYetkiId"] = admin.YetkiId;
-
-                if (admin.YetkiId == 1)
-                {
-                    return RedirectToAction("ArizaGoruntule", "BirimAdmin");
-                    //switch (admin.BirimId)
-                    //{
-                    //    case 1:
-                    //        return RedirectToAction("YArizaGoruntuleme", "YazilimAdmin");
-                    //    case 2:
-                    //        return RedirectToAction("SArizaGoruntuleme", "SistemAdmin");
-                    //    case 3:
-                    //        return RedirectToAction("AArizaGoruntuleme", "AgAdmin");
-                    //}
-                }
-                if (admin.YetkiId == 4 && admin.BirimId == 4)
-                {
-                    return RedirectToAction("Index", "GenelAdmin");
-                }
-                else
-                {
-                    ViewBag.Mesaj = "Kullanıcı adı veya şifre yanlış.";
-                    return View();
-                }
-            }
-
-            // Check YetkiliServis table
-            if (yetkiliServis != null)
-            {
-                Session["YYetkiId"] = yetkiliServis.YetkiId;
-                Session["ArizaTurId"] = yetkiliServis.ArizaTurId;
-                if (yetkiliServis.YetkiId == 3)
-                {
-                    switch (yetkiliServis.ArizaTurId)
+                    if (kullanici.YetkiId == 2)
                     {
-                        case 1:
-                            return RedirectToAction("Elektrik", "YetkiliServis");
-                        case 2:
-                            return RedirectToAction("SuTesisat", "YetkiliServis");
-                        case 3:
-                            return RedirectToAction("Yazilim", "YetkiliServis");
-                        case 4:
-                            return RedirectToAction("Donanim", "YetkiliServis");
+                        return RedirectToAction("Bildirim", "Kullanici");
+                    }
+                    else if (kullanici.YetkiId == 1)
+                    {
+                        return RedirectToAction("ArizaGoruntule", "BirimAdmin");
+                    }
+                    else if (kullanici.YetkiId == 3)
+                    {
+                        return RedirectToAction("ArizaTakip", "YetkiliServis");
+                    }
+                    else
+                    {
+                        ViewBag.Mesaj = "Yetki tanımlı değil.";
+                        return View();
                     }
                 }
-                else
-                {
-                    ViewBag.Mesaj = "Kullanıcı adı veya şifre yanlış.";
-                    return View();
-                }
+
+                ViewBag.Mesaj = "Kullanıcı adı veya şifre yanlış.";
+                return View();
             }
 
-            ViewBag.Mesaj = "Kullanıcı adı veya şifre yanlış.";
+            // ❗Eksik olan kısım buydu — kullanıcı bulunamazsa buraya düşer
+            ViewBag.Mesaj = "Kullanıcı bulunamadı.";
             return View();
         }
+
         public ActionResult Register()
         {
             ViewBag.BirimList = entity.Birim.Where(k => k.Id != 4).ToList();
@@ -173,26 +113,6 @@ namespace HataBildirimSistemi.Controllers
             ViewBag.BirimList = entity.Birim.ToList();
             return View(yeniKullanici);
         }
-
-
-        // Şifremi Unuttum (GET)
-        public ActionResult ForgotPassword()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult ForgotPassword(string KKullaniciAd)
-        {
-            // Hem Kullanici hem de Admin tablolarında arama yap
-            var kullanici = entity.Kullanici.FirstOrDefault(x => x.KKullaniciAd == KKullaniciAd);
-
-            if (kullanici == null )
-            {
-                ViewBag.Message = "Böyle bir kullanıcı bulunamadı.";
-                return View();
-            }
-
         // Şifremi Unuttum (GET)
         public ActionResult ForgotPassword()
         {

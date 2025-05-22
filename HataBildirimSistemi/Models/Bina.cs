@@ -11,9 +11,8 @@ namespace HataBildirimSistemi.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
-    public partial class Admin
+    
+    public partial class Bina
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Bina()
@@ -23,15 +22,6 @@ namespace HataBildirimSistemi.Models
     
         public int Id { get; set; }
         public string Ad { get; set; }
-        public string Soyad { get; set; }
-        public string TelNo { get; set; }
-        public Nullable<int> BirimId { get; set; }
-        public string AKullaniciAd { get; set; }
-
-        [Required]
-        [StringLength(20, MinimumLength = 6, ErrorMessage = "Şifre 6 ile 20 karakter arasında olmalıdır.")]
-        public string ASifre { get; set; }
-        public Nullable<int> YetkiId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ArızaBildirim> ArızaBildirim { get; set; }

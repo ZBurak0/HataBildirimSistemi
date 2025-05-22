@@ -1,8 +1,4 @@
-﻿@{
-    Layout = null;
-}
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="utf-8" />
@@ -14,64 +10,63 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
 
+    @RenderSection("Styles", required: false) <!-- EKSİK OLAN KISIM EKLENDİ -->
+
     <style>
         body {
-            font-size: 1.3rem; /* Genel yazı boyutunu artırdık */
+            font-size: 1.3rem;
         }
 
         .navbar {
-            font-size: 1.2rem; /* Navbar yazı boyutunu artırdık */
+            font-size: 1.2rem;
         }
 
         .navbar-brand {
-            font-size: 1.8rem; /* Navbar başlık boyutunu büyüttük */
+            font-size: 1.8rem;
         }
 
         .nav-link {
-            font-size: 1.4rem; /* Navbar linklerinin yazı boyutunu artırdık */
-            font-weight: 600; /* Navbar linklerini kalınlaştırdık */
-            padding: 10px 15px; /* Linklerin etrafına biraz boşluk ekledik */
+            font-size: 1.4rem;
+            font-weight: 600;
+            padding: 10px 15px;
         }
 
             .nav-link:hover {
-                background-color: #B8D5FF; /* Hover durumunda pastel mavi arka plan ekledik */
+                background-color: #B8D5FF;
             }
 
         main {
-            font-size: 1.2rem; /* Sayfa içeriği yazı boyutunu büyüttük */
+            font-size: 1.2rem;
         }
 
         table th, table td {
-            font-size: 1.2rem; /* Tablo başlıkları ve hücre yazı boyutlarını artırdık */
-            padding: 20px; /* Hücrelerin içine daha fazla boşluk ekledik */
+            font-size: 1.2rem;
+            padding: 20px;
         }
 
         table {
             width: 100%;
-            margin-top: 30px; /* Tabloya daha fazla boşluk ekledik */
+            margin-top: 30px;
         }
 
         h2, h3 {
-            font-size: 2.5rem; /* Başlık yazı boyutunu 2 katına çıkardık */
-            font-weight: 700; /* Yazı tipini kalın yaptık */
+            font-size: 2.5rem;
+            font-weight: 700;
         }
 
-        /* Navbar butonlarını büyütme ve kalınlaştırma */
         .navbar-nav .nav-item .nav-link {
-            font-size: 1.5rem; /* Linkleri daha büyük yapıyoruz */
-            font-weight: 700; /* Linkleri kalın yapıyoruz */
-            padding: 15px 20px; /* Butonların etrafına ekstra boşluk ekledik */
+            font-size: 1.5rem;
+            font-weight: 700;
+            padding: 15px 20px;
         }
 
-        /* Dropdown menüsündeki item'ları da büyüttük */
         .dropdown-menu .dropdown-item {
-            font-size: 1.4rem; /* Dropdown menüsündeki item'ları büyüttük */
-            padding: 10px 20px; /* Item'ların etrafına boşluk ekledik */
+            font-size: 1.4rem;
+            padding: 10px 20px;
         }
 
-        /* Dropdown menüsüne hover etkisi ekledik */
         .dropdown-item:hover {
-            background-color: #B8D5FF; /* Hover durumunda pastel mavi arka plan */
+            background-color: #B8D5FF;
         }
     </style>
 </head>
@@ -79,7 +74,6 @@
 <body>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #A9C8FF;">
-        <!-- pastel mavi -->
         <div class="container-fluid">
             <a class="navbar-brand fw-bold text-white" href="#">
                 <i class="bi bi-tools me-2"></i>Birim Admin Panel
@@ -115,5 +109,7 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    @RenderSection("Scripts", required: false)
 </body>
 </html>

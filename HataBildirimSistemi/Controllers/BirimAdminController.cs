@@ -16,10 +16,9 @@ namespace HataBildirimSistemi.Controllers
         {
             return View();
         }
-        [HttpGet]
         public ActionResult ArizaGoruntule()
         {
-            var birimId = Session["ABirimId"] as int?;
+            var birimId = Session["KBirimId"] as int?;
             if (birimId == null)
                 return RedirectToAction("Index", "Login");
 
@@ -48,9 +47,10 @@ namespace HataBildirimSistemi.Controllers
 
         // POST: BirimAdmin/ArizaGoruntule
         [HttpPost]
-        public ActionResult ArizaGoruntule(int? ArizaTurId)
+        [ValidateAntiForgeryToken]
+        public ActionResult ArizaGoruntule(int? ArizaTurId, int? BinaId, string SearchText, bool? Oncelik)
         {
-            var birimId = Session["ABirimId"] as int?;
+            var birimId = Session["KBirimId"] as int?;
             if (birimId == null)
                 return RedirectToAction("Index", "Login");
 
@@ -61,7 +61,7 @@ namespace HataBildirimSistemi.Controllers
                 .Include(a => a.Bina)
                 .Where(a => a.BirimId == birimId);
 
-            if (ArizaTurId.HasValue)
+            if (ArizaTurId.HasValue && ArizaTurId.Value != 0)
                 arizalar = arizalar.Where(a => a.ArizaTurId == ArizaTurId);
 
             if (BinaId.HasValue && BinaId.Value != 0)
@@ -124,11 +124,11 @@ namespace HataBildirimSistemi.Controllers
 
         public ActionResult BAProfil()
         {
-            int? AdminId = Session["AId"] as int?;
+            int? AdminId = Session["KId"] as int?;
             if (AdminId == null)
                 return RedirectToAction("Index", "Login");
 
-            var Admin = entity.Admin.FirstOrDefault(a => a.Id == AdminId);
+            var Admin = entity.Kullanici.FirstOrDefault(a => a.Id == AdminId);
             if (Admin == null)
                 return HttpNotFound();
 
@@ -140,53 +140,51 @@ namespace HataBildirimSistemi.Controllers
         [HttpGet]
         public ActionResult Duzenle(int id)
         {
-            var Admin = entity.Admin.Find(id);
-            if (Admin == null)
+            var kullanici = entity.Kullanici.Find(id);
+            if (kullanici == null)
+            {
                 return HttpNotFound();
             }
 
             // Birim listesini ViewBag ile View'a gönder
             ViewBag.Birimler = new SelectList(entity.Birim.ToList(), "Id", "Ad", kullanici.BirimId);
 
-            return View(Admin);
+            return View(kullanici);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Duzenle(Admin model)
+        public ActionResult Duzenle(Kullanici model)
         {
             if (ModelState.IsValid)
             {
-                if (model.ASifre.Length < 6 || model.ASifre.Length > 20)
+                if (model.KSifre.Length < 6 || model.KSifre.Length > 20)
                 {
-                    ModelState.AddModelError("ASifre", "Şifre 6 ile 20 karakter arasında olmalıdır.");
+                    ModelState.AddModelError("KSifre", "Şifre 6 ile 20 karakter arasında olmalıdır.");
                     return View(model);
                 }
                 // Kullanıcı adı kontrolü
-                if (!model.AKullaniciAd.ToLower().EndsWith("@akdeniz.edu.tr"))
+                if (!model.KKullaniciAd.ToLower().EndsWith("@akdeniz.edu.tr"))
                 {
-                    ModelState.AddModelError("KullaniciAdi", "Kullanıcı adı @akdeniz.edu.tr ile bitmelidir.");
+                    ModelState.AddModelError("KKullaniciAdi", "Kullanıcı adı @akdeniz.edu.tr ile bitmelidir.");
                     return View(model);
                 }
 
-                var Admin = entity.Admin.Find(model.Id);
-                if (Admin != null)
-                    {
-                    Admin.Ad = model.Ad;
-                    Admin.Soyad = model.Soyad;
-                    Admin.TelNo = model.TelNo;
-                    Admin.ASifre = model.ASifre;
-                    Admin.AKullaniciAd = model.AKullaniciAd;
+                var kullanici = entity.Kullanici.Find(model.Id);
+                if (kullanici != null)
+                {
+                    kullanici.Ad = model.Ad;
+                    kullanici.Soyad = model.Soyad;
+                    kullanici.TelNo = model.TelNo;
+                    kullanici.KKullaniciAd = model.KKullaniciAd;
+                    kullanici.KSifre = model.KSifre;
 
-                        entity.SaveChanges();
-                    TempData["SuccessMessage"] = "Profil başarıyla güncellendi.";
+                    entity.SaveChanges();
                     return RedirectToAction("BAProfil");
                 }
+
+                return HttpNotFound();
             }
-
-            // Hata varsa birim listesini tekrar yükle
-            ViewBag.Birimler = new SelectList(entity.Birim.ToList(), "Id", "Ad", model.BirimId);
-
             return View(model);
         }
         public ActionResult LogOut() 

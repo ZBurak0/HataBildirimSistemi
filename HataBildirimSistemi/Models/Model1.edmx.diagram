@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="5b214645fba64166abb8aa73d6a0b777" Name="Diagram1">
+      <Diagram DiagramId="7ea6ed0fbc414050b814fd3aed18bfe6" Name="Diagram1">
         <EntityTypeShape EntityType="HataBildirimModelMvcModel.C__EFMigrationsHistory" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="HataBildirimModelMvcModel.AltArizaTur" Width="1.5" PointX="3" PointY="6.625" IsExpanded="true" />
         <EntityTypeShape EntityType="HataBildirimModelMvcModel.ArızaBildirim" Width="1.5" PointX="3" PointY="1.375" IsExpanded="true" />

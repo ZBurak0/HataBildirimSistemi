@@ -24,12 +24,7 @@ namespace HataBildirimSistemi.Models
         public int Id { get; set; }
         public string Ad { get; set; }
         public string Soyad { get; set; }
-
-        public Nullable<int> BirimId { get; set; }
-
-        [Required(ErrorMessage = "Telefon numarası girilmelidir.")]
-        [StringLength(11, ErrorMessage = "Telefon numarası en fazla 11 haneli olmalıdır.")]
-        [RegularExpression(@"^\d{11}$", ErrorMessage = "Telefon numarası sadece rakamlardan oluşmalı ve 11 haneli olmalıdır.")]
+        public int BirimId { get; set; }
         public string TelNo { get; set; }
         public string KKullaniciAd { get; set; }
         public string KSifre { get; set; }
