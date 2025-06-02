@@ -1,6 +1,8 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HataBildirimSistemi.Models
 {
@@ -22,6 +24,10 @@ namespace HataBildirimSistemi.Models
         public virtual DbSet<Kullanici> Kullanici { get; set; }
         public virtual DbSet<Yetki> Yetki { get; set; }
 
+
+        public virtual DbSet<AltArizaTur> AltArizaTur { get; set; }
+
+        IEnumerable<HataBildirimSistemi.Models.AltArizaTur> AltArizaTurleri { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)

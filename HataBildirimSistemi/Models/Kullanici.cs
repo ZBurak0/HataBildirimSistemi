@@ -31,7 +31,9 @@ namespace HataBildirimSistemi.Models
         public int YetkiId { get; set; }
         public Nullable<int> ArizaTurId { get; set; }
         public Nullable<int> AltArizaTurId { get; set; }
+        public Nullable<int> AltBirimId { get; set; }
     
+        public virtual AltBirim AltBirim { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ArızaBildirim> ArızaBildirim { get; set; }
         public virtual ArızaTur ArızaTur { get; set; }

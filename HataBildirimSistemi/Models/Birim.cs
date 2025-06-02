@@ -17,6 +17,7 @@ namespace HataBildirimSistemi.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Birim()
         {
+            this.AltBirim = new HashSet<AltBirim>();
             this.ArızaBildirim = new HashSet<ArızaBildirim>();
             this.Kullanici = new HashSet<Kullanici>();
         }
@@ -24,6 +25,8 @@ namespace HataBildirimSistemi.Models
         public int Id { get; set; }
         public string Ad { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<AltBirim> AltBirim { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ArızaBildirim> ArızaBildirim { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

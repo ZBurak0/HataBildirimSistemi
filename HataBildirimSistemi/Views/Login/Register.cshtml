@@ -200,12 +200,53 @@
         </div>
 
         <div class="form-group">
+            @Html.LabelFor(model => model.AltBirimId, "Alt Birim")
+            @Html.DropDownListFor(model => model.AltBirimId,
+                new SelectList(ViewBag.AltBirimList as IEnumerable<dynamic> ?? new List<dynamic>(), "Id", "Ad"),
+                "-- Alt birim seçiniz --",
+                new
+                {
+                    @class = "form-control" + (ViewData.ModelState["AltBirimId"]?.Errors.Count > 0 ? " is-invalid" : ""),
+                    required = "required",
+                    id = "AltBirimId"
+                })
+            @Html.ValidationMessageFor(model => model.AltBirimId, null, new { @class = "validation-error" })
+            <span class="validation-error text-danger d-none" id="altBirimError">Alt birim seçimi zorunludur</span>
+        </div>
+
+        <div class="form-group">
             <button type="submit" class="btn btn-register">Kayıt Ol</button>
         </div>
     }
 </div>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script>
+    $(document).ready(function () {
+        $('#BirimId').change(function () {
+            var birimId = $(this).val();
+
+            $('#AltBirimId').empty().append('<option value="">Yükleniyor...</option>').prop('disabled', true);
+
+            if (birimId) {
+                $.getJSON('/Login/AltBirimleriGetir', { birimId: birimId }, function (data) {
+                    var altBirimSelect = $('#AltBirimId');
+                    altBirimSelect.empty().append('<option value="">-- Alt birim seçiniz --</option>').prop('disabled', false);
+
+                    $.each(data, function (i, item) {
+                        altBirimSelect.append($('<option>', {
+                            value: item.Id,
+                            text: item.Ad
+                        }));
+                    });
+                });
+            } else {
+                $('#AltBirimId').empty().append('<option value="">Önce birim seçiniz</option>').prop('disabled', true);
+            }
+        });
+    });
+
     document.getElementById('registerForm').addEventListener('submit', function (event) {
         let isValid = true;
 
@@ -224,7 +265,7 @@
             }
         });
 
-        // Özel birim kontrolü
+        // Birim kontrolü
         const birimSelect = document.getElementById('BirimId');
         const birimError = document.getElementById('birimError');
         if (birimSelect.value === "") {
@@ -234,6 +275,21 @@
         } else {
             birimSelect.classList.remove('is-invalid');
             birimError.classList.add('d-none');
+        }
+
+        // Alt Birim kontrolü (güncellendi)
+        const altBirimSelect = document.getElementById('AltBirimId');
+        const altBirimError = document.getElementById('altBirimError');
+        if (altBirimSelect.value === "" ||
+            altBirimSelect.value === "Yükleniyor..." ||
+            altBirimSelect.value === "Önce birim seçiniz" ||
+            altBirimSelect.disabled) {
+            altBirimSelect.classList.add('is-invalid');
+            altBirimError.classList.remove('d-none');
+            isValid = false;
+        } else {
+            altBirimSelect.classList.remove('is-invalid');
+            altBirimError.classList.add('d-none');
         }
 
         if (!isValid) {

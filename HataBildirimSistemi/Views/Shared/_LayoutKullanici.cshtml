@@ -2,46 +2,69 @@
 <html lang="tr">
 <head>
     <meta charset="utf-8" />
+    <title>@ViewBag.Title - Kullanıcı Paneli</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>@ViewBag.Title - Birim Admin Panel</title>
-    <link href="~/Content/theme.css" rel="stylesheet" />
 
-    <!-- Bootstrap CSS & Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="~/Content/theme.css" rel="stylesheet" />
 
-    @RenderSection("Styles", required: false) <!-- EKSİK OLAN KISIM EKLENDİ -->
+    @RenderSection("Styles", required: false)
 
     <style>
         body {
-            font-size: 1.3rem;
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f7fc;
+            height: 100vh;
+            display: flex;
         }
 
-        .navbar {
-            font-size: 1.2rem;
+        .sidebar {
+            width: 240px;
+            background-color: #00C0C0;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 2rem 1rem;
         }
 
-        .navbar-brand {
-            font-size: 1.8rem;
-        }
-
-        .nav-link {
-            font-size: 1.4rem;
-            font-weight: 600;
-            padding: 10px 15px;
-        }
-
-            .nav-link:hover {
-                background-color: #B8D5FF;
+            .sidebar h4 {
+                color: white;
+                font-weight: bold;
+                text-align: center;
+                margin-bottom: 2rem;
             }
 
-        main {
-            font-size: 1.2rem;
+            .sidebar .nav-link {
+                color: white;
+                font-size: 1.1rem;
+                font-weight: 500;
+                padding: 12px 16px;
+                border-radius: 10px;
+                transition: background-color 0.2s ease-in-out;
+            }
+
+                .sidebar .nav-link:hover {
+                    background-color: #009d9b;
+                    color: white;
+                }
+
+        .sidebar-bottom {
+            margin-top: auto;
         }
 
-        table th, table td {
-            font-size: 1.2rem;
-            padding: 20px;
+        .content {
+            flex-grow: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        h2 {
+            font-weight: 700;
+            font-size: 2rem;
         }
 
         table {
@@ -49,67 +72,38 @@
             margin-top: 30px;
         }
 
-        h2, h3 {
-            font-size: 2.5rem;
-            font-weight: 700;
-        }
-
-        .navbar-nav .nav-item .nav-link {
-            font-size: 1.5rem;
-            font-weight: 700;
-            padding: 15px 20px;
-        }
-
-        .dropdown-menu .dropdown-item {
-            font-size: 1.4rem;
-            padding: 10px 20px;
-        }
-
-        .dropdown-item:hover {
-            background-color: #B8D5FF;
-        }
+            table th, table td {
+                font-size: 1.2rem;
+                padding: 15px;
+            }
     </style>
 </head>
-
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #A9C8FF;">
-        <div class="container-fluid">
-            <a class="navbar-brand fw-bold text-white" href="#">
-                <i class="bi bi-tools me-2"></i>Birim Admin Panel
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        @Html.ActionLink("Arıza Bildirim", "Bildirim", "Kullanici", null, new { @class = "nav-link text-white" })
-                    </li>
-                    <li class="nav-item">
-                        @Html.ActionLink("Bildirim geçmişi", "Listeleme", "Kullanici", null, new { @class = "nav-link text-white" })
-                    </li>
-                    <li class="nav-item">
-                        @Html.ActionLink("Profil", "Profil", "Kullanici", null, new { @class = "nav-link text-white" })
-                    </li>
-                    <li class="nav-item">
-                        @Html.ActionLink("Çıkış yap", "LogOut", "Kullanici", null, new { @class = "nav-link text-white" })
-                    </li>
-                </ul>
-            </div>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div>
+            <h4>Birim Paneli</h4>
+            <nav class="nav flex-column">
+                @Html.ActionLink("Arıza Bildirim", "Bildirim", "Kullanici", null, new { @class = "nav-link" })
+                @Html.ActionLink("Bildirim Geçmişi", "Listeleme", "Kullanici", null, new { @class = "nav-link" })
+            </nav>
         </div>
-    </nav>
 
-    <!-- Sayfa içeriği -->
-    <main class="container mt-4">
+        <!-- Alt Menüler -->
+        <div class="sidebar-bottom">
+            <nav class="nav flex-column">
+                @Html.ActionLink("Profil", "Profil", "Kullanici", null, new { @class = "nav-link" })
+                @Html.ActionLink("Çıkış Yap", "LogOut", "Kullanici", null, new { @class = "nav-link" })
+            </nav>
+        </div>
+    </div>
+
+    <!-- Sayfa İçeriği -->
+    <div class="content">
         @RenderBody()
-    </main>
+    </div>
 
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
     @RenderSection("Scripts", required: false)
 </body>
 </html>

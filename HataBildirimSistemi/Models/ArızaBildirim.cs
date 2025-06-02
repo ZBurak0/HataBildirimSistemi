@@ -27,11 +27,15 @@ namespace HataBildirimSistemi.Models
         public Nullable<bool> Oncelik { get; set; }
         public Nullable<byte> SıraNo { get; set; }
         public Nullable<int> KullaniciId { get; set; }
+        public Nullable<int> AltArizaTurId { get; set; }
     
+        public virtual AltArizaTur AltArizaTur { get; set; }
         public virtual ArızaTur ArızaTur { get; set; }
         public virtual Bina Bina { get; set; }
         public virtual Birim Birim { get; set; }
         public virtual Durum Durum { get; set; }
         public virtual Kullanici Kullanici { get; set; }
+        public IEnumerable<AltArizaTur> AltArizaTurleri { get; set; }
+        public IEnumerable<Kullanici> Kullanicilar { get; set; }
     }
 }

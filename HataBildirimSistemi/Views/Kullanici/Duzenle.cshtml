@@ -130,7 +130,37 @@
         @Html.ValidationMessageFor(m => m.KSifre, "", new { @class = "text-danger" })
     </div>
 
+    <div class="form-group">
+        @Html.Label("Birim")
+        @Html.DropDownListFor(m => m.BirimId, (SelectList)ViewBag.Birimler, "-- Seçiniz --", new { @class = "form-control", @id = "BirimId" })
+        @Html.ValidationMessageFor(m => m.BirimId, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Alt Birim")
+        @Html.DropDownListFor(m => m.AltBirimId, (SelectList)ViewBag.AltBirimler, "-- Seçiniz --", new { @class = "form-control", @id = "AltBirimId" })
+        @Html.ValidationMessageFor(m => m.AltBirimId, "", new { @class = "text-danger" })
+    </div>
 
     <button type="submit" class="btn btn-primary">Kaydet</button>
     <a href="@Url.Action("Profil", "Kullanici")" class="btn btn-secondary">İptal</a>
+}
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#BirimId").change(function () {
+                var birimId = $(this).val();
+                $.getJSON('@Url.Action("AltBirimleriGetir", "Kullanici")', { birimId: birimId }, function (data) {
+                    var altBirimSelect = $("#AltBirimId");
+                    altBirimSelect.empty();
+                    altBirimSelect.append($('<option>').text('-- Seçiniz --').attr('value', ''));
+                    $.each(data, function (i, item) {
+                        altBirimSelect.append($('<option>').text(item.Ad).attr('value', item.Id));
+                    });
+                });
+            });
+        });
+    </script>
 }

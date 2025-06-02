@@ -49,7 +49,7 @@ namespace HataBildirimSistemi.Controllers
                     }
                     else if (kullanici.YetkiId == 3)
                     {
-                        return RedirectToAction("ArizaTakip", "YetkiliServis");
+                        return RedirectToAction("ArizaGoruntule", "YetkiliServis");
                     }
                     else
                     {
@@ -70,6 +70,7 @@ namespace HataBildirimSistemi.Controllers
         public ActionResult Register()
         {
             ViewBag.BirimList = entity.Birim.Where(k => k.Id != 4).ToList();
+            ViewBag.AltBirimList = new List<AltBirim>(); // İlk açıldığında boş liste gönder
             return View(new Kullanici());
         }
 
@@ -78,14 +79,12 @@ namespace HataBildirimSistemi.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Kullanıcı adı @akdeniz.edu.tr ile bitmeli
                 if (!yeniKullanici.KKullaniciAd.EndsWith("@akdeniz.edu.tr"))
                 {
                     ModelState.AddModelError("KKullaniciAd", "Kullanıcı adı @akdeniz.edu.tr ile bitmelidir.");
                 }
                 else
                 {
-                    // Aynı kullanıcı adı var mı kontrol et
                     var mevcutKullanici = entity.Kullanici.FirstOrDefault(x => x.KKullaniciAd == yeniKullanici.KKullaniciAd);
                     if (mevcutKullanici != null)
                     {
@@ -93,26 +92,37 @@ namespace HataBildirimSistemi.Controllers
                     }
                 }
 
-                // Hata yoksa kayıt yap
                 if (ModelState.IsValid)
                 {
-                    // Şifre hashle (istersen aktif et)
                     // yeniKullanici.KSifre = BCrypt.Net.BCrypt.HashPassword(yeniKullanici.KSifre);
-
-                    // Varsayılan yetki
                     yeniKullanici.YetkiId = 2;
-
-                    // Veritabanına kaydet
                     entity.Kullanici.Add(yeniKullanici);
                     entity.SaveChanges();
-
                     return RedirectToAction("Index", "Login");
                 }
             }
 
-            ViewBag.BirimList = entity.Birim.ToList();
+            ViewBag.BirimList = entity.Birim.Where(k => k.Id != 4).ToList();
+            ViewBag.AltBirimList = entity.AltBirim
+                .Where(ab => ab.BirimId == yeniKullanici.BirimId)
+                .ToList();
+
             return View(yeniKullanici);
         }
+
+        [HttpGet]
+        public JsonResult AltBirimleriGetir(int birimId)
+        {
+            var altBirimler = entity.AltBirim
+                .Where(ab => ab.BirimId == birimId)
+                .Select(ab => new { ab.Id, ab.Ad })
+                .ToList();
+
+            return Json(altBirimler, JsonRequestBehavior.AllowGet);
+        }
+
+
+
         // Şifremi Unuttum (GET)
         public ActionResult ForgotPassword()
         {

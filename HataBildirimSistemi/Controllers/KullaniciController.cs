@@ -17,7 +17,8 @@ namespace HataBildirimSistemi.Controllers
         // GET: Kullanici
         public ActionResult Bildirim()
         {
-            var Arizalar = entity.ArızaTur.ToList();
+            var Arizalar = entity.ArızaTur
+                .Where(a => a.Id != 2005).ToList();
             var Binalar = entity.Bina.ToList();
 
             ViewBag.Arizalar = Arizalar;
@@ -102,6 +103,7 @@ namespace HataBildirimSistemi.Controllers
             arzb.Tarih = DateTime.Now;
             arzb.DurumId = 5;
             arzb.BinaId = binaId;
+            arzb.AltArizaTurId = 25;
 
             entity.ArızaBildirim.Add(arzb);
             entity.SaveChanges();
@@ -117,7 +119,8 @@ namespace HataBildirimSistemi.Controllers
         {
             var KAd = Session["KUAd"];
             ViewBag.Birimler = new SelectList(entity.Birim.ToList(), "Id", "Ad");
-            ViewBag.Arizalar = new SelectList(entity.ArızaTur.ToList(), "Id", "Ad");
+            ViewBag.Arizalar = new SelectList(entity.ArızaTur
+                .Where(a => a.Id != 2005).ToList(), "Id", "Ad");
             ViewBag.Durumlar = new SelectList(entity.Durum.ToList(), "Id", "Ad");
             ViewBag.Binalar = new SelectList(entity.Bina.ToList(), "Id", "Ad"); // Bina listesi
 
@@ -165,7 +168,8 @@ namespace HataBildirimSistemi.Controllers
             }
 
             ViewBag.Birimler = new SelectList(entity.Birim.ToList(), "Id", "Ad", BirimId);
-            ViewBag.Arizalar = new SelectList(entity.ArızaTur.ToList(), "Id", "Ad", ArizaTurId);
+            ViewBag.Arizalar = new SelectList(entity.ArızaTur
+                .Where(a => a.Id != 2005).ToList(), "Id", "Ad", ArizaTurId);
             ViewBag.Durumlar = new SelectList(entity.Durum.ToList(), "Id", "Ad", DurumId);
             ViewBag.Binalar = new SelectList(entity.Bina.ToList(), "Id", "Ad", BinaId);  // Bina dropdown
 
@@ -187,6 +191,7 @@ namespace HataBildirimSistemi.Controllers
             }
             return View(kullanici);
         }
+
         [HttpGet]
         public ActionResult Duzenle(int id)
         {
@@ -196,11 +201,12 @@ namespace HataBildirimSistemi.Controllers
                 return HttpNotFound();
             }
 
-            // Birim listesini ViewBag ile View'a gönder
             ViewBag.Birimler = new SelectList(entity.Birim.ToList(), "Id", "Ad", kullanici.BirimId);
+            ViewBag.AltBirimler = new SelectList(entity.AltBirim.Where(ab => ab.BirimId == kullanici.BirimId).ToList(), "Id", "Ad", kullanici.AltBirimId);
 
             return View(kullanici);
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -228,6 +234,8 @@ namespace HataBildirimSistemi.Controllers
                     kullanici.TelNo = model.TelNo;
                     kullanici.KKullaniciAd = model.KKullaniciAd;
                     kullanici.KSifre = model.KSifre;
+                    kullanici.BirimId = model.BirimId;
+                    kullanici.AltBirimId = model.AltBirimId;
 
                     entity.SaveChanges();
                     return RedirectToAction("Profil");
@@ -236,6 +244,16 @@ namespace HataBildirimSistemi.Controllers
                 return HttpNotFound();
             }
             return View(model);
+        }
+
+        public JsonResult AltBirimleriGetir(int birimId)
+        {
+            var altBirimler = entity.AltBirim
+                .Where(ab => ab.BirimId == birimId)
+                .Select(ab => new { ab.Id, ab.Ad })
+                .ToList();
+
+            return Json(altBirimler, JsonRequestBehavior.AllowGet);
         }
         public ActionResult LogOut()
         {

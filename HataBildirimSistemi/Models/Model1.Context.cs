@@ -27,6 +27,7 @@ namespace HataBildirimSistemi.Models
     
         public virtual DbSet<C__EFMigrationsHistory> C__EFMigrationsHistory { get; set; }
         public virtual DbSet<AltArizaTur> AltArizaTur { get; set; }
+        public virtual DbSet<AltBirim> AltBirim { get; set; }
         public virtual DbSet<ArızaBildirim> ArızaBildirim { get; set; }
         public virtual DbSet<ArızaTur> ArızaTur { get; set; }
         public virtual DbSet<Bina> Bina { get; set; }

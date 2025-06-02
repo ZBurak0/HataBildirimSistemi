@@ -1,7 +1,7 @@
 ﻿@model List<HataBildirimSistemi.Models.ArızaBildirim>
 @{
-    ViewBag.Title = "Arıza Görüntüleme";
-    Layout = "~/Views/Shared/_LayoutBirimAdmin.cshtml";
+    ViewBag.Title = "TamamlananArizaGoruntule";
+    Layout = "~/Views/Shared/_LayoutYetkiliServiis.cshtml";
 }
 
 @section Styles {
@@ -29,10 +29,10 @@
             table-layout: fixed;
         }
 
-        .table th {
-            background-color: #2C3E50;
-            color: white;
-        }
+            .table th {
+                background-color: #2C3E50;
+                color: white;
+            }
 
         .table-hover tbody tr:hover {
             background-color: #96ADD6;
@@ -51,13 +51,13 @@
             width: 100%;
         }
 
-        .btn-filter i {
-            margin-right: 10px;
-        }
+            .btn-filter i {
+                margin-right: 10px;
+            }
 
-        .btn-filter:hover {
-            background-color: #1f6e66;
-        }
+            .btn-filter:hover {
+                background-color: #1f6e66;
+            }
 
         .form-label {
             font-weight: 500;
@@ -107,14 +107,10 @@
         <div class="alert alert-success">@ViewBag.SuccessMessage</div>
     }
 
-    @using (Html.BeginForm("ArizaGoruntule", "BirimAdmin", FormMethod.Post))
+    @using (Html.BeginForm("TamamlananArizaGoruntule", "YetkiliServis", FormMethod.Post))
     {
         @Html.AntiForgeryToken()
         <div class="row mb-4 align-items-end">
-            <div class="col-md-3">
-                <label for="ArizaTurId" class="form-label">Arıza Türü</label>
-                @Html.DropDownList("ArizaTurId", (SelectList)ViewBag.Arizalar, "Seçiniz", new { @class = "form-select" })
-            </div>
             <div class="col-md-3">
                 <label for="BinaId" class="form-label">Bina</label>
                 @Html.DropDownList("BinaId", (SelectList)ViewBag.Binalar, "Seçiniz", new { @class = "form-select" })
@@ -154,7 +150,6 @@
                     <th>Tarih</th>
                     <th>Durum</th>
                     <th>Öncelik</th>
-                    <th>Atama</th>
                 </tr>
             </thead>
             <tbody>
@@ -165,25 +160,8 @@
                         <tr>
                             <td>@item.Id</td>
                             <td>@item.Ad</td>
-                            <td>@item.AltArizaTur.ArızaTur.Ad</td>
-
-                            <td>
-                                @if (item.AltArizaTurId == 25)
-                                {
-                                    <div class="text-muted">Alt tür atanmamış</div>
-                                }
-                                else
-                                {
-                                    <div class="text-muted">Alt tür atanmış</div>
-                                }
-                                @using (Html.BeginForm("AltArizaBelirle", "BirimAdmin", FormMethod.Post))
-                                {
-                                    @Html.AntiForgeryToken()
-                                    @Html.Hidden("arizaId", item.Id)
-                                    @Html.DropDownList("AltArizaId", new SelectList((IEnumerable<HataBildirimSistemi.Models.AltArizaTur>)item.AltArizaTurleri, "Id", "Ad", item.AltArizaTurId), new { @class = "form-select form-select-sm d-inline-block w-auto", style = "margin-right: 5px;" })
-                                    <button type="submit" class="btn btn-sm btn-primary">Güncelle</button>
-                                }
-                            </td>
+                            <td>@item.ArızaTur.Ad</td>
+                            <td>@item.AltArizaTur.Ad</td>                            
                             <td>@item.Birim.Ad</td>
                             <td>@(item.Bina != null ? item.Bina.Ad : "—")</td>
                             <td>@item.Aciklama</td>
@@ -198,51 +176,15 @@
                                 }
                             </td>
                             <td>@item.Tarih.ToString("dd.MM.yyyy")</td>
+                            <td>@item.Durum.Ad</td>
                             <td>
-                                @using (Html.BeginForm("DurumDegistir", "BirimAdmin", FormMethod.Post))
+                                @if (item.Oncelik.HasValue)
                                 {
-                                    @Html.AntiForgeryToken()
-                                    @Html.Hidden("arizaId", item.Id)
-                                    @Html.DropDownList("durumId", new SelectList((IEnumerable<HataBildirimSistemi.Models.Durum>)ViewBag.Durumlar, "Id", "Ad", item.DurumId), new { @class = "form-select form-select-sm d-inline-block w-auto", style = "margin-right: 5px;" })
-                                    <button type="submit" class="btn btn-sm btn-primary">Güncelle</button>
-                                }
-                            </td>
-
-                            <td>
-                                <div>
-                                    @if (item.Oncelik.HasValue)
-                                    {
-                                        <div>@(item.Oncelik.Value ? "Acil" : "Normal")</div>
-                                    }
-                                    else
-                                    {
-                                        <div class="text-muted">Belirtilmemiş</div>
-                                    }
-                                    @using (Html.BeginForm("OncelikDegistir", "BirimAdmin", FormMethod.Post))
-                                    {
-                                        @Html.AntiForgeryToken()
-                                        @Html.Hidden("arizaId", item.Id)
-                                        @Html.Hidden("yeniOncelik", !item.Oncelik.GetValueOrDefault())
-                                        <button type="submit" class="btn btn-sm btn-warning mt-2">
-                                            Önceliği @(item.Oncelik == true ? "Normale Al" : "Acile Al")
-                                        </button>
-                                    }
-                                </div>
-                            </td>
-                            <td>
-                                @if (item.Kullanicilar != null && item.Kullanicilar.Any())
-                                {
-                                    using (Html.BeginForm("IsAta", "BirimAdmin", FormMethod.Post))
-                                    {
-                                        @Html.AntiForgeryToken()
-                                        @Html.Hidden("arizaId", item.Id)
-                                        @Html.DropDownList("KullaniciId", new SelectList(item.Kullanicilar, "Id", "Ad", item.KullaniciId), new { @class = "form-select form-select-sm d-inline-block w-auto", style = "margin-right: 5px;" })
-                                        <button type="submit" class="btn btn-sm btn-primary">Güncelle</button>
-                                    }
+                                    <div>@(item.Oncelik.Value ? "Acil" : "Normal")</div>
                                 }
                                 else
                                 {
-                                    <span class="text-muted">Atanabilir servis yok</span>
+                                    <div class="text-muted">Belirtilmemiş</div>
                                 }
                             </td>
                         </tr>
@@ -258,3 +200,7 @@
         </table>
     </div>
 </div>
+
+
+
+

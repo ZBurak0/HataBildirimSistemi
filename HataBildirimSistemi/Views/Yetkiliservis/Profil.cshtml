@@ -1,8 +1,10 @@
 ﻿﻿@model HataBildirimSistemi.Models.Kullanici
 @{
     ViewBag.Title = "Profil";
-    Layout = "~/Views/Shared/_LayoutBirimAdmin.cshtml";
+    Layout = "~/Views/Shared/_LayoutYetkiliServiis.cshtml";
 }
+
+
 
 @section Styles {
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -95,12 +97,8 @@
                 <td>@Model.Soyad</td>
             </tr>
             <tr>
-                <th>Bulunduğu Birim</th>
+                <th>Çalıştığı birim</th>
                 <td>@Model.Birim.Ad</td>
-            </tr>,
-            <tr>
-                <th>Alt Birim</th>
-                <td>@Model.AltBirim.Ad</td>
             </tr>
             <tr>
                 <th>Yetkisi</th>
@@ -119,8 +117,9 @@
                 <td>@Model.KSifre</td>
             </tr>
         </table>
-        <a href="@Url.Action("Duzenle", "BirimAdmin", new { id = Model.Id })" class="btn btn-warning">
+        <a href="@Url.Action("Duzenle", "YetkiliServis", new { id = Model.Id })" class="btn btn-warning">
             Düzenle
         </a>
+
 
 

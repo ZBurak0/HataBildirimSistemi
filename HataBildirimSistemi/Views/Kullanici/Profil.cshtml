@@ -85,36 +85,40 @@
     <div class="profile-container">
         <h2>Profil Bilgilerim</h2>
 
-<table class="table table-bordered mt-3 w-50">
-    <tr>
-        <th>Ad</th>
-        <td>@Model.Ad</td>
-    </tr>
-    <tr>
-        <th>Soyad</th>
-        <td>@Model.Soyad</td>
-    </tr>
-    <tr>
-        <th>Çalıştığı birim</th>
-        <td>@Model.Birim.Ad</td>
-    </tr>
-    <tr>
-        <th>Yetkisi</th>
-        <td>@Model.Yetki.Ad</td>
-    </tr>
-    <tr>
-        <th>Telefon</th>
-        <td>@Model.TelNo</td>
-    </tr>
-    <tr>
-        <th>Kullanıcı Ad</th>
-        <td>@Model.KKullaniciAd</td>
-    </tr>
-    <tr>
-        <th>Şifre</th>
-        <td>@Model.KSifre</td>
-    </tr>
-</table>
+        <table class="table table-bordered mt-3 w-50">
+            <tr>
+                <th>Ad</th>
+                <td>@Model.Ad</td>
+            </tr>
+            <tr>
+                <th>Soyad</th>
+                <td>@Model.Soyad</td>
+            </tr>
+            <tr>
+                <th>Bulunduğu Birim</th>
+                <td>@Model.AltBirim.Birim.Ad</td>
+            </tr>
+            <tr>
+                <th>Alt Birim</th>
+                <td>@Model.AltBirim.Ad</td>
+            </tr>
+            <tr>
+                <th>Yetkisi</th>
+                <td>@Model.Yetki.Ad</td>
+            </tr>
+            <tr>
+                <th>Telefon</th>
+                <td>@Model.TelNo</td>
+            </tr>
+            <tr>
+                <th>Kullanıcı Ad</th>
+                <td>@Model.KKullaniciAd</td>
+            </tr>
+            <tr>
+                <th>Şifre</th>
+                <td>@Model.KSifre</td>
+            </tr>
+        </table>
 <a href="@Url.Action("Duzenle", "Kullanici", new { id = Model.Id })" class="btn btn-warning">
     Düzenle
 </a>

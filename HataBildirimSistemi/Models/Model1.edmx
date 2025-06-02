@@ -18,7 +18,15 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ArizaTurId" Type="int" />
-          <Property Name="Ad" Type="nchar" MaxLength="10" />
+          <Property Name="Ad" Type="varchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="AltBirim">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Ad" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="BirimId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="ArızaBildirim">
           <Key>
@@ -37,6 +45,7 @@
           <Property Name="Oncelik" Type="bit" />
           <Property Name="SıraNo" Type="tinyint" />
           <Property Name="KullaniciId" Type="int" />
+          <Property Name="AltArizaTurId" Type="int" />
         </EntityType>
         <EntityType Name="ArızaTur">
           <Key>
@@ -80,6 +89,7 @@
           <Property Name="YetkiId" Type="int" Nullable="false" />
           <Property Name="ArizaTurId" Type="int" />
           <Property Name="AltArizaTurId" Type="int" />
+          <Property Name="AltBirimId" Type="int" />
         </EntityType>
         <EntityType Name="ServisArizaTur">
           <Key>
@@ -116,6 +126,30 @@
             </Principal>
             <Dependent Role="AltArizaTur">
               <PropertyRef Name="ArizaTurId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AltBirim_Birim">
+          <End Role="Birim" Type="Self.Birim" Multiplicity="1" />
+          <End Role="AltBirim" Type="Self.AltBirim" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Birim">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AltBirim">
+              <PropertyRef Name="BirimId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ArızaBildirim_AltArizaTur">
+          <End Role="AltArizaTur" Type="Self.AltArizaTur" Multiplicity="0..1" />
+          <End Role="ArızaBildirim" Type="Self.ArızaBildirim" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AltArizaTur">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ArızaBildirim">
+              <PropertyRef Name="AltArizaTurId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -176,6 +210,18 @@
             </Principal>
             <Dependent Role="ArızaBildirim">
               <PropertyRef Name="KullaniciId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Kullanici_AltBirim">
+          <End Role="AltBirim" Type="Self.AltBirim" Multiplicity="0..1" />
+          <End Role="Kullanici" Type="Self.Kullanici" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AltBirim">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Kullanici">
+              <PropertyRef Name="AltBirimId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -254,6 +300,7 @@
         <EntityContainer Name="HataBildirimModelMvcModelStoreContainer">
           <EntitySet Name="__EFMigrationsHistory" EntityType="Self.__EFMigrationsHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AltArizaTur" EntityType="Self.AltArizaTur" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AltBirim" EntityType="Self.AltBirim" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ArızaBildirim" EntityType="Self.ArızaBildirim" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ArızaTur" EntityType="Self.ArızaTur" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Bina" EntityType="Self.Bina" Schema="dbo" store:Type="Tables" />
@@ -266,6 +313,14 @@
           <AssociationSet Name="FK_AltArizaTur_ArızaTur" Association="Self.FK_AltArizaTur_ArızaTur">
             <End Role="ArızaTur" EntitySet="ArızaTur" />
             <End Role="AltArizaTur" EntitySet="AltArizaTur" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AltBirim_Birim" Association="Self.FK_AltBirim_Birim">
+            <End Role="Birim" EntitySet="Birim" />
+            <End Role="AltBirim" EntitySet="AltBirim" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ArızaBildirim_AltArizaTur" Association="Self.FK_ArızaBildirim_AltArizaTur">
+            <End Role="AltArizaTur" EntitySet="AltArizaTur" />
+            <End Role="ArızaBildirim" EntitySet="ArızaBildirim" />
           </AssociationSet>
           <AssociationSet Name="FK_ArızaBildirim_ArızaTur" Association="Self.FK_ArızaBildirim_ArızaTur">
             <End Role="ArızaTur" EntitySet="ArızaTur" />
@@ -286,6 +341,10 @@
           <AssociationSet Name="FK_ArızaBildirim_Kullanici" Association="Self.FK_ArızaBildirim_Kullanici">
             <End Role="Kullanici" EntitySet="Kullanici" />
             <End Role="ArızaBildirim" EntitySet="ArızaBildirim" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Kullanici_AltBirim" Association="Self.FK_Kullanici_AltBirim">
+            <End Role="AltBirim" EntitySet="AltBirim" />
+            <End Role="Kullanici" EntitySet="Kullanici" />
           </AssociationSet>
           <AssociationSet Name="FK_Kullanici_ArızaTur" Association="Self.FK_Kullanici_ArızaTur">
             <End Role="ArızaTur" EntitySet="ArızaTur" />
@@ -330,9 +389,20 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ArizaTurId" Type="Int32" />
-          <Property Name="Ad" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Ad" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="ArızaTur" Relationship="Self.FK_AltArizaTur_ArızaTur" FromRole="AltArizaTur" ToRole="ArızaTur" />
+          <NavigationProperty Name="ArızaBildirim" Relationship="Self.FK_ArızaBildirim_AltArizaTur" FromRole="AltArizaTur" ToRole="ArızaBildirim" />
           <NavigationProperty Name="ServisArizaTur" Relationship="Self.FK_ServisArizaTur_AltArizaTur" FromRole="AltArizaTur" ToRole="ServisArizaTur" />
+        </EntityType>
+        <EntityType Name="AltBirim">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Ad" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="BirimId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Birim" Relationship="Self.FK_AltBirim_Birim" FromRole="AltBirim" ToRole="Birim" />
+          <NavigationProperty Name="Kullanici" Relationship="Self.FK_Kullanici_AltBirim" FromRole="AltBirim" ToRole="Kullanici" />
         </EntityType>
         <EntityType Name="ArızaBildirim">
           <Key>
@@ -351,6 +421,8 @@
           <Property Name="Oncelik" Type="Boolean" />
           <Property Name="SıraNo" Type="Byte" />
           <Property Name="KullaniciId" Type="Int32" />
+          <Property Name="AltArizaTurId" Type="Int32" />
+          <NavigationProperty Name="AltArizaTur" Relationship="Self.FK_ArızaBildirim_AltArizaTur" FromRole="ArızaBildirim" ToRole="AltArizaTur" />
           <NavigationProperty Name="ArızaTur" Relationship="Self.FK_ArızaBildirim_ArızaTur" FromRole="ArızaBildirim" ToRole="ArızaTur" />
           <NavigationProperty Name="Bina" Relationship="Self.FK_ArızaBildirim_Bina" FromRole="ArızaBildirim" ToRole="Bina" />
           <NavigationProperty Name="Birim" Relationship="Self.FK_ArızaBildirim_Birim" FromRole="ArızaBildirim" ToRole="Birim" />
@@ -382,6 +454,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Ad" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AltBirim" Relationship="Self.FK_AltBirim_Birim" FromRole="Birim" ToRole="AltBirim" />
           <NavigationProperty Name="ArızaBildirim" Relationship="Self.FK_ArızaBildirim_Birim" FromRole="Birim" ToRole="ArızaBildirim" />
           <NavigationProperty Name="Kullanici" Relationship="Self.FK_Kullanici_Birim" FromRole="Birim" ToRole="Kullanici" />
         </EntityType>
@@ -407,6 +480,8 @@
           <Property Name="YetkiId" Type="Int32" Nullable="false" />
           <Property Name="ArizaTurId" Type="Int32" />
           <Property Name="AltArizaTurId" Type="Int32" />
+          <Property Name="AltBirimId" Type="Int32" />
+          <NavigationProperty Name="AltBirim" Relationship="Self.FK_Kullanici_AltBirim" FromRole="Kullanici" ToRole="AltBirim" />
           <NavigationProperty Name="ArızaBildirim" Relationship="Self.FK_ArızaBildirim_Kullanici" FromRole="Kullanici" ToRole="ArızaBildirim" />
           <NavigationProperty Name="ArızaTur" Relationship="Self.FK_Kullanici_ArızaTur" FromRole="Kullanici" ToRole="ArızaTur" />
           <NavigationProperty Name="Birim" Relationship="Self.FK_Kullanici_Birim" FromRole="Kullanici" ToRole="Birim" />
@@ -455,6 +530,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_ArızaBildirim_AltArizaTur">
+          <End Role="AltArizaTur" Type="Self.AltArizaTur" Multiplicity="0..1" />
+          <End Role="ArızaBildirim" Type="Self.ArızaBildirim" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AltArizaTur">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ArızaBildirim">
+              <PropertyRef Name="AltArizaTurId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_ServisArizaTur_AltArizaTur">
           <End Role="AltArizaTur" Type="Self.AltArizaTur" Multiplicity="1" />
           <End Role="ServisArizaTur" Type="Self.ServisArizaTur" Multiplicity="*" />
@@ -464,6 +551,30 @@
             </Principal>
             <Dependent Role="ServisArizaTur">
               <PropertyRef Name="AltArizaTurId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AltBirim_Birim">
+          <End Role="Birim" Type="Self.Birim" Multiplicity="1" />
+          <End Role="AltBirim" Type="Self.AltBirim" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Birim">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AltBirim">
+              <PropertyRef Name="BirimId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Kullanici_AltBirim">
+          <End Role="AltBirim" Type="Self.AltBirim" Multiplicity="0..1" />
+          <End Role="Kullanici" Type="Self.Kullanici" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AltBirim">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Kullanici">
+              <PropertyRef Name="AltBirimId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -590,6 +701,7 @@
         <EntityContainer Name="HataBildirimModelMvcEntities3" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="C__EFMigrationsHistory" EntityType="Self.C__EFMigrationsHistory" />
           <EntitySet Name="AltArizaTur" EntityType="Self.AltArizaTur" />
+          <EntitySet Name="AltBirim" EntityType="Self.AltBirim" />
           <EntitySet Name="ArızaBildirim" EntityType="Self.ArızaBildirim" />
           <EntitySet Name="ArızaTur" EntityType="Self.ArızaTur" />
           <EntitySet Name="Bina" EntityType="Self.Bina" />
@@ -603,9 +715,21 @@
             <End Role="ArızaTur" EntitySet="ArızaTur" />
             <End Role="AltArizaTur" EntitySet="AltArizaTur" />
           </AssociationSet>
+          <AssociationSet Name="FK_ArızaBildirim_AltArizaTur" Association="Self.FK_ArızaBildirim_AltArizaTur">
+            <End Role="AltArizaTur" EntitySet="AltArizaTur" />
+            <End Role="ArızaBildirim" EntitySet="ArızaBildirim" />
+          </AssociationSet>
           <AssociationSet Name="FK_ServisArizaTur_AltArizaTur" Association="Self.FK_ServisArizaTur_AltArizaTur">
             <End Role="AltArizaTur" EntitySet="AltArizaTur" />
             <End Role="ServisArizaTur" EntitySet="ServisArizaTur" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AltBirim_Birim" Association="Self.FK_AltBirim_Birim">
+            <End Role="Birim" EntitySet="Birim" />
+            <End Role="AltBirim" EntitySet="AltBirim" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Kullanici_AltBirim" Association="Self.FK_Kullanici_AltBirim">
+            <End Role="AltBirim" EntitySet="AltBirim" />
+            <End Role="Kullanici" EntitySet="Kullanici" />
           </AssociationSet>
           <AssociationSet Name="FK_ArızaBildirim_ArızaTur" Association="Self.FK_ArızaBildirim_ArızaTur">
             <End Role="ArızaTur" EntitySet="ArızaTur" />
@@ -671,6 +795,15 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="AltBirim">
+            <EntityTypeMapping TypeName="HataBildirimModelMvcModel.AltBirim">
+              <MappingFragment StoreEntitySet="AltBirim">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Ad" ColumnName="Ad" />
+                <ScalarProperty Name="BirimId" ColumnName="BirimId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="ArızaBildirim">
             <EntityTypeMapping TypeName="HataBildirimModelMvcModel.ArızaBildirim">
               <MappingFragment StoreEntitySet="ArızaBildirim">
@@ -687,6 +820,7 @@
                 <ScalarProperty Name="Oncelik" ColumnName="Oncelik" />
                 <ScalarProperty Name="SıraNo" ColumnName="SıraNo" />
                 <ScalarProperty Name="KullaniciId" ColumnName="KullaniciId" />
+                <ScalarProperty Name="AltArizaTurId" ColumnName="AltArizaTurId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -735,6 +869,7 @@
                 <ScalarProperty Name="YetkiId" ColumnName="YetkiId" />
                 <ScalarProperty Name="ArizaTurId" ColumnName="ArizaTurId" />
                 <ScalarProperty Name="AltArizaTurId" ColumnName="AltArizaTurId" />
+                <ScalarProperty Name="AltBirimId" ColumnName="AltBirimId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
